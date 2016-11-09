@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Entrypoint for Affiance hook integration. Installing affiance will result
+# in all of your git hooks being symlinked to this file, allowing the framework
+# to manage your hooks for you.
+
+# The file that was invoked indicates which hook is being called.
+hook=`basename "$0"`
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+echo "$DIR/$hook"
+node $DIR/affiance-hook.js "$hook"

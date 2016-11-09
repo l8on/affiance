@@ -1,0 +1,165 @@
+# Default configuration that all Affiance configurations inherit from.
+#
+# This is an opinionated list of which hooks are valuable to run and what their
+# out-of-the-box settings should be.
+#-------------------------------------------------------------------------------
+
+# Where to store hook plugins specific to a repository. These are loaded in
+# addition to the default hooks Affiance comes with. The location is relative
+# to the root of the repository.
+pluginDirectory: '.git-hooks'
+
+# Number of hooks that can be run concurrently. Typically this won't need to be
+# adjusted, but if you know that some of your hooks themselves use multiple
+# processors you can lower this value accordingly. You can define
+# single-operator mathematical expressions, e.g. '%{processors} * 2', or
+# '%{processors} / 2'.
+concurrency: '%{processors}'
+
+# Whether to hide hook output by default. This results in completely silent hook
+# runs except in the case of warning or failure.
+quiet: false
+
+# Whether to check if a hook plugin has changed since Overcommit last ran it.
+# This is a defense mechanism when working with repositories which can contain
+# untrusted code (e.g. when you fetch a pull request from a third party).
+# See https://github.com/brigade/overcommit#security for more information.
+verifySignatures: true
+
+# Hooks that are run against every commit message after a user has written it.
+# These hooks are useful for enforcing policies on commit messages written for a
+# project.
+CommitMsg:
+  ALL:
+    requiresFiles: false
+    quiet: false
+
+  CapitalizedSubject:
+    enabled: true
+    description: 'Check subject capitalization'
+
+  EmptyMessage:
+    enabled: true
+    description: 'Check for empty commit message'
+    quiet: true
+
+# Hooks that are run after `git commit` is executed, before the commit message
+# editor is displayed. These hooks are ideal for syntax checkers, linters, and
+# other checks that you want to run before you allow a commit object to be
+# created.
+PreCommit:
+  ALL:
+    problem_on_unmodified_line: report
+    requiresFiles: true
+    required: false
+    quiet: false
+
+  CoffeeLint:
+    enabled: false
+    description: 'Analyze with coffeelint'
+    requiredExecutable: 'coffeelint'
+    flags: ['--reporter=csv']
+    install_command: 'npm install -g coffeelint'
+    include: '**/*.coffee'
+
+  MergeConflicts:
+    enabled: true
+    description: 'Check for merge conflicts'
+    quiet: true
+    requiredExecutable: 'grep'
+    flags: ['-IHn', "^<<<<<<<[ \t]"]
+
+  StylusLint:
+    enabled: false
+    description: "Analyze with stylus linter"
+    quiet: false
+    requiredExecutable: 'stylint'
+    flags: []
+
+# Hooks that run after HEAD changes or a file is explicitly checked out.
+PostCheckout:
+  ALL:
+    required: false
+    quiet: false
+    skipFileCheckout: true
+
+  NpmInstall:
+    enabled: false
+    description: 'Install NPM dependencies'
+    requiresFiles: true
+    requiredExecutable: 'npm'
+    flags: ['install']
+    include:
+      - 'package.json'
+      - 'npm-shrinkwrap.json'
+
+# Hooks that run after a commit is created.
+PostCommit:
+  ALL:
+    requiresFiles: false
+    required: false
+    quiet: false
+
+  NpmInstall:
+    enabled: false
+    description: 'Install NPM dependencies'
+    requiresFiles: true
+    requiredExecutable: 'npm'
+    flags: ['install']
+    include:
+      - 'package.json'
+      - 'npm-shrinkwrap.json'
+
+# Hooks that run after `git merge` executes successfully (no merge conflicts).
+PostMerge:
+  ALL:
+    requiresFiles: false
+    quiet: false
+
+  NpmInstall:
+    enabled: false
+    description: 'Install NPM dependencies'
+    requiresFiles: true
+    requiredExecutable: 'npm'
+    flags: ['install']
+    include:
+      - 'package.json'
+      - 'npm-shrinkwrap.json'
+
+# Hooks that run after a commit is modified by an amend or rebase.
+PostRewrite:
+  ALL:
+    requires_files: false
+    quiet: false
+
+# Hooks that run during `git push`, after remote refs have been updated but
+# before any objects have been transferred.
+PrePush:
+  ALL:
+    requiresFiles: false
+    required: false
+    quiet: false
+
+  ProtectedBranches:
+    enabled: false
+    description: 'Check for illegal pushes to protected branches'
+    destructiveOnly: true
+    branches: ['master']
+
+  Mocha:
+    enabled: false
+    description: 'Run Mocha test suite'
+    requiredExecutable: 'mocha'
+
+# Hooks that run during `git rebase`, before any commits are rebased.
+# If a hook fails, the rebase is aborted.
+PreRebase:
+  ALL:
+    requiresFiles: false
+    required: false
+    quiet: false
+
+  MergedCommits:
+    enabled: false
+    description: 'Check for commits that have already been merged'
+    branches: ['master']

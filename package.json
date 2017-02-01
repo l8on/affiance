@@ -7,7 +7,7 @@
     "test": "mocha test/unit/"
   },
   "bin": {
-    "affiance": "bin/affiance.js"
+    "affiance": "./bin/affiance.js"
   },
   "repository": {
     "type": "git",

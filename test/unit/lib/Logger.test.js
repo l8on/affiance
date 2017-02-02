@@ -92,7 +92,6 @@ describe('Logger', function() {
 
     describe('#debug', function() {
       it('does nothing if the log level is not debug', function() {
-        console.log('hello?');
         this.logger.debug('something', 'to', 'debug');
         expect(this.mockConsole.log).to.not.have.been.called
       });

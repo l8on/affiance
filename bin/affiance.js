@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#! /usr/bin/env node
 console.log('affiance binary running!');
 
 var program = require('commander');

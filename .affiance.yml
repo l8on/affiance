@@ -24,15 +24,9 @@ CommitMsg:
     enabled: true
     description: 'Check subject capitalization'
 
-#PreCommit:
-#  JsLint:
-#    enabled: true
-#    onWarn: fail # Treat all warnings as failures
-#
-#  TrailingWhitespace:
-#    enabled: true
-#    exclude:
-#      - 'package.json' # Ignore trailing whitespace in generated files
+PreCommit:
+  ALL:
+    enabled: false
 #
 #PostCheckout:
 #  ALL: # Special hook name that customizes all hooks of this type

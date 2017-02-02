@@ -4,6 +4,9 @@
 
 // Get the type of hook from the arguments.
 var hookType = process.argv[2];
+// Capture original args sent to hook script
+var originalArgs = process.argv.slice(3);
+
 // Exit early if the `affiance-hook` file was invoked directly.
 if (hookType === 'affiance-hook') {
     console.log("Don't run `affiance-hook` directly." +
@@ -29,20 +32,25 @@ try {
     var logger = new Affiance.Logger({level: process.env.LOG_LEVEL});
 
     // Ensure master hook is up to date
-    var installer = new Affiance.Installer({logger: logger});
+    var installer = new Affiance.Installer(logger);
+    // TODO figure out how to get this to actually work! Currently hangs when spawning.
+
     if (installer.update()) {
         // If the installation was updated, re-run the current command.
         var childProcess = require('child_process');
-        var spawnResult = childProcess.spawnSync(process.argv[0], process.argv.slice(1));
+        var repoRoot = Affiance.gitRepo.repoRoot();
+        var command = repoRoot + '/.git/hooks/' + hookType;
+        var spawnResult = childProcess.spawnSync(command, originalArgs, {detached: true});
         process.exit(spawnResult.status);
     }
 
+
     var config  = Affiance.configLoader.loadRepoConfig();
-    var hookContext = Affiance.HookContext.createContext(hookType, config, process.argv, process.stdin);
+    var hookContext = Affiance.HookContext.createContext(hookType, config, originalArgs, process.stdin);
     config.applyEnvironment(hookContext, process.env);
 
     var printer = new Affiance.Printer(config, logger, hookContext);
-    var hookRunner = new Affiance.HookRunner(config, hookContext, logger, printer);
+    var hookRunner = new Affiance.HookRunner(config, logger, hookContext, printer);
 
     var status = hookRunner.run();
     process.exit(status ? 0 : 65); // EX_DATAERR

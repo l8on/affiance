@@ -8,4 +8,4 @@
 hook=`basename "$0"`
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 echo "$DIR/$hook"
-node $DIR/affiance-hook.js "$hook"
+node $DIR/affiance-hook.js "$hook" "$@"

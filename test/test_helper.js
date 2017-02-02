@@ -71,7 +71,7 @@ function tempRepo(options) {
 
   childProcess.execSync(initCommand, execOptions);
   childProcess.execSync('git config --local user.name "Affiance Tester"', execOptions);
-  childProcess.execSync('git config --local user.email "overcommit@example.com"', execOptions);
+  childProcess.execSync('git config --local user.email "affiance@example.com"', execOptions);
   childProcess.execSync('git config --local rerere.enabled 0', execOptions);
   childProcess.execSync('git config --local commit.gpgsign false', execOptions);
 

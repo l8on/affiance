@@ -29,6 +29,17 @@ program.command('uninstall')
     }).run();
   });
 
+program.command('sign')
+  .description('Update signatures for config and hooks')
+  .option('-h, --hook [hook]', 'Sign a specific hook')
+  .action(function(commandOptions) {
+    var Installer = require('../lib/cli/Installer');
+    new Installer(logger, {
+      action: 'sign',
+      hookToSign: commandOptions.hook
+    }).run();
+  });
+
 
 program.parse(process.argv);
 

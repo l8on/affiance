@@ -63,7 +63,7 @@ try {
     switch(e.affianceName) {
       case Affiance.error.ConfigurationError:
         console.log(e.message);
-        process.exit(77) // EX_CONFIG
+        process.exit(77); // EX_CONFIG
 
       case Affiance.error.HookSetupFailed:
       case Affiance.error.HookCleanupFailed:
@@ -74,11 +74,11 @@ try {
       case Affiance.error.InvalidHookDefinition:
         console.log(e.message);
         if (e.stack) { console.log(e.stack); }
-        process.exit(78) // EX_CONFIG
+        process.exit(78); // EX_CONFIG
 
       case Affiance.error.InvalidGitRepo:
         console.log(e.message);
-        process.exit(64) // EX_USAGE
+        process.exit(64); // EX_USAGE
 
       default:
         console.log(e.message);

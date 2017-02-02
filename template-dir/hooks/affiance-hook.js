@@ -22,6 +22,8 @@ try {
         console.log('This repository contains hooks installed by Affiance, but the ' +
                     "`affiance` module is not installed.\n" +
                     'Install it with `npm install affiance`.');
+
+        process.exit();
     } else {
         throw e;
     }

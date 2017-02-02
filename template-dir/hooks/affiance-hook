@@ -7,5 +7,5 @@
 # The file that was invoked indicates which hook is being called.
 hook=`basename "$0"`
 DIR="$( cd "$( dirname "$0" )" && pwd )"
-echo "$DIR/$hook"
+#echo "$DIR/$hook"
 node $DIR/affiance-hook.js "$hook" "$@"

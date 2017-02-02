@@ -1,6 +1,4 @@
 #! /usr/bin/env node
-console.log('affiance binary running!');
-
 var program = require('commander');
 module.exports = program;
 

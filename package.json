@@ -4,7 +4,8 @@
   "description": "A configurable and extendable Git hook manager for node projects",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha test/unit/"
+    "test": "mocha test/unit/",
+    "postinstall": "scripts/postinstall.js"
   },
   "bin": {
     "affiance": "./bin/affiance.js"

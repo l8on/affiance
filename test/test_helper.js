@@ -47,7 +47,6 @@ function getSourcePath(testModule, repoPath) {
 
 function directory(name) {
   name = name || 'some-dir';
-  var prefix = '/tmp' + path.sep;
   var dirPath = path.join('/tmp', 'affiance-' + uuid(), name);
   fse.ensureDirSync(dirPath);
 
@@ -55,6 +54,22 @@ function directory(name) {
 }
 
 function cleanupDirectory(path) {
+  return fse.removeSync(path);
+}
+
+function tempFile(name, content) {
+  name = name || 'some-file';
+  var filePath = path.join('/tmp', 'affiance-' + uuid(), name);
+  if (content) {
+    fse.outputFileSync(filePath, content)
+  } else {
+    fse.ensureFileSync(filePath)
+  }
+
+  return filePath;
+}
+
+function cleanupFile(path) {
   return fse.removeSync(path);
 }
 
@@ -91,10 +106,12 @@ beforeEach('clean up memoized utils', function() {
 module.exports = {
   chai: chai,
   cleanupDirectory: cleanupDirectory,
+  cleanupFile: cleanupFile,
   directory: directory,
   expect: chai.expect,
   sinon: sinon,
   tempRepo: tempRepo,
+  tempFile: tempFile,
   requireSourceModule: requireSourceModule,
   getSourcePath: getSourcePath
 };

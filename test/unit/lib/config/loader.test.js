@@ -27,7 +27,7 @@ describe('loader', function() {
 
   describe('.loadRepoConfig', function() {
     it('loads the default configuration if none is defined', function() {
-      var config = loader.loadRepoConfig();
+      var config = loader.loadRepoConfig({verify: false});
       expect(config.json).to.deep.equal(defaultConfig);
     });
   });
@@ -39,7 +39,7 @@ describe('loader', function() {
     });
 
     it('merges the loaded config with the default configuration', function() {
-      var config = loader.loadRepoConfig();
+      var config = loader.loadRepoConfig({verify: false});
       var defaultCopy = _.merge({}, defaultConfig);
 
       defaultCopy.pluginDirectory = 'some-directory';

@@ -5,7 +5,7 @@ var HookContextCommitMsg = testHelper.requireSourceModule(module);
 var Config = testHelper.requireSourceModule(module, 'lib/config');
 var gitRepo = testHelper.requireSourceModule(module, 'lib/gitRepo');
 
-describe('HookContextBase', function () {
+describe('HookContextCommitMsg', function () {
   beforeEach('setup hook context', function() {
     this.sandbox = sinon.sandbox.create();
     this.sandbox.stub(gitRepo, 'commentCharacter').returns('#');

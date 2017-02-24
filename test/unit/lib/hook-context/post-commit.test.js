@@ -41,7 +41,7 @@ describe('HookContextPostCommit', function () {
     });
   });
 
-  describe('#modifiedFields', function() {
+  describe('#modifiedFiles', function() {
     it('does not include submodules', function() {
       var submoduleRepo = testHelper.tempRepo();
       fse.ensureFileSync(path.join(submoduleRepo, 'foo'));

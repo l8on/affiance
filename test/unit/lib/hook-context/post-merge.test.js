@@ -40,22 +40,24 @@ describe('HookContextPostMerge', function () {
     });
   });
 
-  describe('isSquashCommit', function() {
+  describe('#isSquashCommit', function() {
     it('returns true if the first argument is 1', function() {
       this.context.argv = [1];
       expect(this.context.isSquashCommit()).to.equal(true);
     });
+
     it('returns false if there are no arguments', function() {
       this.context.argv = [];
       expect(this.context.isSquashCommit()).to.equal(false);
     });
   });
 
-  describe('isMergeCommit', function() {
+  describe('#isMergeCommit', function() {
     it('returns false if the first argument is 1', function() {
       this.context.argv = [1];
       expect(this.context.isMergeCommit()).to.equal(false);
     });
+
     it('returns true if there are no arguments', function() {
       this.context.argv = [];
       expect(this.context.isMergeCommit()).to.equal(true);
@@ -91,7 +93,7 @@ describe('HookContextPostMerge', function () {
 
       expect(this.context.modifiedFiles()).to.be.empty
     });
-    //
+
     it('returns added files', function() {
       utils.execSync('git commit --allow-empty -m "Initial commit"');
       utils.execSync('git checkout -b child > /dev/null 2>&1');

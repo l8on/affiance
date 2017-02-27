@@ -1,3 +1,4 @@
+var crypto = require('crypto');
 var childProcess = require('child_process');
 var fse = require('fs-extra');
 var Module = require('module');
@@ -93,6 +94,11 @@ function tempRepo(options) {
   return repoPath;
 }
 
+function randomHash()  {
+  var now = Date.now().toString();
+  var random = Math.random().toString();
+  return crypto.createHash('sha1').update(now + random).digest('hex');
+}
 
 // Add global beforeEach to clean up memoized values on utils.
 // Ensures each test can setup repos and git directories without handling
@@ -109,6 +115,7 @@ module.exports = {
   cleanupFile: cleanupFile,
   directory: directory,
   expect: chai.expect,
+  randomHash: randomHash,
   sinon: sinon,
   tempRepo: tempRepo,
   tempFile: tempFile,

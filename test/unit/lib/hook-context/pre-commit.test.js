@@ -572,4 +572,46 @@ describe('HookContextPreCommit', function () {
       });
     });
   });
+
+  describe('#modifiedLinesInFile', function() {
+    beforeEach('stub isAmendment and return false by default', function() {
+      this.filePath = path.join(this.repoPath, 'some-file');
+      this.sandbox.stub(this.context, 'isAmendment');
+      this.context.isAmendment.returns(false);
+    });
+
+    it('returns all lines with content', function() {
+      fse.writeFileSync(this.filePath, '1\n2\n3\n');
+      utils.execSync('git add some-file');
+
+      var modifiedLines = this.context.modifiedLinesInFile('some-file');
+      expect(modifiedLines).to.deep.equal(['1', '2', '3'])
+    });
+
+    it('returns all lines with content even without a trailing newline', function() {
+      fse.writeFileSync(this.filePath, '1\n2\n3');
+      utils.execSync('git add some-file');
+
+      var modifiedLines = this.context.modifiedLinesInFile('some-file');
+      expect(modifiedLines).to.deep.equal(['1', '2', '3'])
+    });
+
+    describe('when amending the last commit', function() {
+      beforeEach('setup amendment', function() {
+        this.context.isAmendment.returns(true);
+
+        fse.writeFileSync(this.filePath, '1\n2\n3\n');
+        utils.execSync('git add some-file');
+        utils.execSync('git commit -m "Add file"');
+
+        fse.appendFileSync(this.filePath, '4\n');
+        utils.execSync('git add some-file');
+      });
+
+      it('returns original and amended lines', function() {
+        var modifiedLines = this.context.modifiedLinesInFile('some-file');
+        expect(modifiedLines).to.deep.equal(['1', '2', '3', '4'])
+      });
+    });
+  });
 });

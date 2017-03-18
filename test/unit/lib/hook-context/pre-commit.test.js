@@ -203,9 +203,54 @@ describe('HookContextPreCommit', function () {
       });
     });
 
-    //TODO: finish the rest of these tests
     describe('when renaming a file during an amendment', function() {
+      beforeEach('rename a file', function() {
+        this.sandbox.stub(this.context, 'isAmendment').returns(true);
+        this.sandbox.spy(fse, 'utimesSync');
 
+        utils.execSync('git commit --allow-empty -m "Initial commit"');
+        fse.ensureFileSync(this.paths['tracked-file']);
+        utils.execSync('git add tracked-file');
+        utils.execSync('git commit -m "Add file"');
+        utils.execSync('git mv tracked-file renamed-file');
+      });
+
+      it('does not attempt to update the modification time of the non-existent file', function() {
+        this.context.setupEnvironment();
+        expect(fse.utimesSync).to.have.been.calledWithMatch(/renamed-file/);
+        expect(fse.utimesSync).to.not.have.been.calledWithMatch(/tracked-file/);
+      });
+    });
+
+    // TODO finish the rest
+    describe('when only a submodule change is staged', function() {
+      beforeEach('setup submodule repo', function() {
+        var submoduleRepo = testHelper.tempRepo();
+        utils.execSync('git commit --allow-empty -m "Initial commit"', {cwd: submoduleRepo});
+
+
+        utils.execSync('git submodule add ' + submoduleRepo + ' sub 2>&1 > /dev/null');
+        utils.execSync('git commit -m "Add submodule"');
+
+        fse.writeFileSync(path.join(this.repoPath, 'sub', 'submodule-file'), 'Hello World');
+        utils.execSync('git submodule foreach "git add submodule-file" < /dev/null');
+        utils.execSync('git submodule foreach "git config --local commit.gpgsign false"');
+        utils.execSync('git submodule foreach "git commit -m \\"Another commit\\"" < /dev/null');
+        utils.execSync('git add sub');
+
+        utils.execSync('git config diff.submodule short');
+      });
+
+      it('keeps staged submodule change', function() {
+        var diffBefore = utils.execSync('git diff --cached');
+        expect(diffBefore).to.match(/-Subproject commit[\s\S]*\+Subproject commit/);
+
+        this.context.setupEnvironment();
+
+        var diffAfter = utils.execSync('git diff --cached');
+        expect(diffAfter).to.match(/-Subproject commit[\s\S]*\+Subproject commit/);
+        expect(diffBefore).to.equal(diffAfter);
+      });
     });
   });
 });

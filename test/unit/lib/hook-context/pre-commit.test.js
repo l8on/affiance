@@ -469,4 +469,107 @@ describe('HookContextPreCommit', function () {
       });
     });
   });
+
+  describe('#modifiedFiles', function() {
+    beforeEach('stub isAmendment and return false by default', function() {
+      this.sandbox.stub(this.context, 'isAmendment');
+      this.context.isAmendment.returns(false);
+    });
+
+    it('is empty if no files are staged', function() {
+      expect(this.context.modifiedFiles()).to.be.empty
+    });
+
+    it('does not include submodules', function() {
+      var submoduleRepo = testHelper.tempRepo();
+      fse.ensureFileSync(path.join(submoduleRepo, 'foo'));
+      utils.execSync('git add foo', {cwd: submoduleRepo});
+      utils.execSync('git commit -m "Initial commit"', {cwd: submoduleRepo});
+
+      utils.execSync('git submodule add ' + submoduleRepo + ' test-sub 2>&1 > /dev/null');
+
+      var modifiedFiles = this.context.modifiedFiles();
+      expect(modifiedFiles).to.have.length(1);
+      expect(modifiedFiles[0]).to.not.include('test-sub');
+    });
+
+    it('includes added files', function() {
+      fse.ensureFileSync(path.join(this.repoPath, 'some-file'));
+      utils.execSync('git add some-file');
+
+      var modifiedFiles = this.context.modifiedFiles();
+      expect(modifiedFiles).to.have.length(1);
+      expect(modifiedFiles[0]).to.include('some-file');
+    });
+
+    it('includes modified files', function() {
+      var filePath = path.join(this.repoPath, 'some-file');
+      fse.ensureFileSync(filePath);
+      utils.execSync('git add some-file');
+      utils.execSync('git commit -m "Initial commit"');
+
+      fse.writeFileSync(filePath, 'Hello');
+      utils.execSync('git add some-file');
+
+      var modifiedFiles = this.context.modifiedFiles();
+      expect(modifiedFiles).to.have.length(1);
+      expect(modifiedFiles[0]).to.include('some-file');
+    });
+
+    it('does not include deleted files', function() {
+      var filePath = path.join(this.repoPath, 'some-file');
+      fse.ensureFileSync(filePath);
+      utils.execSync('git add some-file');
+      utils.execSync('git commit -m "Initial commit"');
+
+      utils.execSync('git rm some-file');
+
+      var modifiedFiles = this.context.modifiedFiles();
+      expect(modifiedFiles).to.be.empty
+    });
+
+    describe('when amending the last commit', function() {
+      beforeEach('setup an amend', function() {
+        this.context.isAmendment.returns(true);
+
+        this.somePath = path.join(this.repoPath, 'some-file');
+        fse.ensureFileSync(this.somePath);
+        utils.execSync('git add some-file');
+        utils.execSync('git commit -m "Initial commit"');
+
+        this.otherPath = path.join(this.repoPath, 'other-file');
+        fse.ensureFileSync(this.otherPath);
+        utils.execSync('git add other-file');
+      });
+
+      it('includes initial commit and staged files', function() {
+        var modifiedFiles = this.context.modifiedFiles();
+        modifiedFiles.sort();
+        expect(modifiedFiles).to.have.length(2);
+        expect(modifiedFiles[0]).to.include('other-file');
+        expect(modifiedFiles[1]).to.include('some-file');
+      });
+    });
+
+    describe('when renaming a file during an amendment', function() {
+      beforeEach('setup an amend', function() {
+        this.context.isAmendment.returns(true);
+
+        utils.execSync('git commit --allow-empty -m "Initial commit"');
+
+        this.somePath = path.join(this.repoPath, 'some-file');
+        fse.ensureFileSync(this.somePath);
+        utils.execSync('git add some-file');
+        utils.execSync('git commit -m "Add file"');
+        utils.execSync('git mv some-file renamed-file');
+      });
+
+      it('does not include the old file name in the list of modified files', function() {
+        var modifiedFiles = this.context.modifiedFiles();
+        modifiedFiles.sort();
+        expect(modifiedFiles).to.have.length(1);
+        expect(modifiedFiles[0]).to.include('renamed-file');
+      });
+    });
+  });
 });

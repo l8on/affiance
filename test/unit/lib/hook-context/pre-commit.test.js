@@ -110,19 +110,19 @@ describe('HookContextPreCommit', function () {
       it('keeps already-committed files', function() {
         this.context.setupEnvironment();
 
-        expect(fse.readFileSync(path.join(this.repoPath, 'tracked-file'), 'utf8')).to.equal('Hello World');
+        expect(fse.readFileSync(this.paths['tracked-file'], 'utf8')).to.equal('Hello World');
       });
 
       it('does not keep unstaged changes', function() {
         this.context.setupEnvironment();
 
-        expect(fse.readFileSync(path.join(this.repoPath, 'other-tracked-file'), 'utf8')).to.equal('Hello Other World');
+        expect(fse.readFileSync(this.paths['other-tracked-file'], 'utf8')).to.equal('Hello Other World');
       });
 
       it('keeps untracked files', function() {
         this.context.setupEnvironment();
 
-        expect(fse.readFileSync(path.join(this.repoPath, 'untracked-file'), 'utf8')).to.equal('Hello Again');
+        expect(fse.readFileSync(this.paths['untracked-file'], 'utf8')).to.equal('Hello Again');
       });
 
       it('keeps moodification times the same', function(done) {
@@ -157,7 +157,7 @@ describe('HookContextPreCommit', function () {
         fse.appendFileSync(this.paths['other-tracked-file'], '\nSome more text');
 
         utils.execSync('git add tracked-file');
-        fse.appendFileSync(this.paths['tracked-file'], 'Yet some more text');
+        fse.appendFileSync(this.paths['tracked-file'], '\nYet some more text');
 
       });
 
@@ -180,11 +180,7 @@ describe('HookContextPreCommit', function () {
       });
 
       it('keeps moodification times the same', function(done) {
-        var paths = {
-          'tracked-file': path.join(this.repoPath, 'tracked-file'),
-          'other-tracked-file': path.join(this.repoPath, 'other-tracked-file'),
-          'untracked-file': path.join(this.repoPath, 'untracked-file')
-        };
+        var paths = this.paths;
 
         var modifiedTimes = {
           'tracked-file': fileUtils.modifiedTime(paths['tracked-file']),
@@ -199,7 +195,7 @@ describe('HookContextPreCommit', function () {
           expect(fileUtils.modifiedTime(paths['other-tracked-file'])).to.equal(modifiedTimes['other-tracked-file']);
           expect(fileUtils.modifiedTime(paths['untracked-file'])).to.equal(modifiedTimes['untracked-file']);
           done();
-        }, 900);
+        }, 1000);
       });
     });
 
@@ -222,12 +218,10 @@ describe('HookContextPreCommit', function () {
       });
     });
 
-    // TODO finish the rest
     describe('when only a submodule change is staged', function() {
       beforeEach('setup submodule repo', function() {
         var submoduleRepo = testHelper.tempRepo();
         utils.execSync('git commit --allow-empty -m "Initial commit"', {cwd: submoduleRepo});
-
 
         utils.execSync('git submodule add ' + submoduleRepo + ' sub 2>&1 > /dev/null');
         utils.execSync('git commit -m "Add submodule"');
@@ -250,6 +244,228 @@ describe('HookContextPreCommit', function () {
         var diffAfter = utils.execSync('git diff --cached');
         expect(diffAfter).to.match(/-Subproject commit[\s\S]*\+Subproject commit/);
         expect(diffBefore).to.equal(diffAfter);
+      });
+    });
+  });
+
+  describe('#cleanupEnvironment', function() {
+    beforeEach('setup file paths', function() {
+      this.paths = {
+        'tracked-file': path.join(this.repoPath, 'tracked-file'),
+        'other-tracked-file': path.join(this.repoPath, 'other-tracked-file'),
+        'untracked-file': path.join(this.repoPath, 'untracked-file')
+      };
+    });
+
+    describe('when there are no staged changes', function() {
+      beforeEach('setup complex commit with no stages changes', function() {
+        fse.writeFileSync(this.paths['tracked-file'], 'Hello World');
+        fse.writeFileSync(this.paths['other-tracked-file'], 'Hello Other World');
+
+        utils.execSync('git add tracked-file other-tracked-file');
+        utils.execSync('git commit -m "Add tracked-file and other-tracked-file"');
+
+        fse.writeFileSync(this.paths['untracked-file'], 'Hello Again');
+        fse.appendFileSync(this.paths['other-tracked-file'], '\nSome more text');
+
+        this.context.setupEnvironment();
+      });
+
+      it('restores unstaged changes', function() {
+        this.context.cleanupEnvironment();
+
+        expect(fse.readFileSync(this.paths['other-tracked-file'], 'utf8')).to.equal('Hello Other World\nSome more text');
+      });
+
+      it('keeps already-committed file', function() {
+        this.context.cleanupEnvironment();
+
+        expect(fse.readFileSync(this.paths['tracked-file'], 'utf8')).to.equal('Hello World');
+      });
+
+      it('keeps untracked files', function() {
+        this.context.cleanupEnvironment();
+
+        expect(fse.readFileSync(this.paths['untracked-file'], 'utf8')).to.equal('Hello Again');
+      });
+
+      it('keeps moodification times the same', function(done) {
+        var modifiedTimes = {
+          'tracked-file': fileUtils.modifiedTime(this.paths['tracked-file']),
+          'other-tracked-file': fileUtils.modifiedTime(this.paths['other-tracked-file']),
+          'untracked-file': fileUtils.modifiedTime(this.paths['untracked-file'])
+        };
+
+        var self = this;
+        setTimeout(function () {
+          self.context.cleanupEnvironment();
+
+          expect(fileUtils.modifiedTime(self.paths['tracked-file'])).to.equal(modifiedTimes['tracked-file']);
+          expect(fileUtils.modifiedTime(self.paths['other-tracked-file'])).to.equal(modifiedTimes['other-tracked-file']);
+          expect(fileUtils.modifiedTime(self.paths['untracked-file'])).to.equal(modifiedTimes['untracked-file']);
+          done();
+        }, 1000);
+      });
+    });
+
+    describe('when there are staged changes', function() {
+      beforeEach('setup complex commit', function() {
+        fse.writeFileSync(this.paths['tracked-file'], 'Hello World');
+        fse.writeFileSync(this.paths['other-tracked-file'], 'Hello Other World');
+
+        utils.execSync('git add tracked-file other-tracked-file');
+        utils.execSync('git commit -m "Add tracked-file and other-tracked-file"');
+
+        fse.writeFileSync(this.paths['untracked-file'], 'Hello Again');
+        fse.appendFileSync(this.paths['tracked-file'], '\nSome more text');
+        fse.appendFileSync(this.paths['other-tracked-file'], '\nSome more text');
+
+        utils.execSync('git add tracked-file');
+        fse.appendFileSync(this.paths['tracked-file'], '\nYet some more text');
+
+        this.context.setupEnvironment();
+      });
+
+      it('restores the unstaged changes', function() {
+        this.context.cleanupEnvironment();
+
+        expect(fse.readFileSync(this.paths['tracked-file'], 'utf8')).to.equal('Hello World\nSome more text\nYet some more text');
+      });
+
+      it('keeps staged changes', function() {
+        this.context.cleanupEnvironment();
+
+        var showOutput = utils.execSync('git show :tracked-file');
+        expect(showOutput).to.equal('Hello World\nSome more text');
+      });
+
+      it('keeps untracked files', function() {
+        this.context.cleanupEnvironment();
+
+        expect(fse.readFileSync(this.paths['untracked-file'], 'utf8')).to.equal('Hello Again');
+      });
+
+      it('keeps moodification times the same', function(done) {
+        var paths = this.paths;
+
+        var modifiedTimes = {
+          'tracked-file': fileUtils.modifiedTime(paths['tracked-file']),
+          'other-tracked-file': fileUtils.modifiedTime(paths['other-tracked-file']),
+          'untracked-file': fileUtils.modifiedTime(paths['untracked-file'])
+        };
+
+        var self = this;
+        setTimeout(function() {
+          self.context.cleanupEnvironment();
+          expect(fileUtils.modifiedTime(paths['tracked-file'])).to.equal(modifiedTimes['tracked-file']);
+          expect(fileUtils.modifiedTime(paths['other-tracked-file'])).to.equal(modifiedTimes['other-tracked-file']);
+          expect(fileUtils.modifiedTime(paths['untracked-file'])).to.equal(modifiedTimes['untracked-file']);
+          done();
+        }, 1000);
+      });
+    });
+
+    describe('when there is a deleted file', function() {
+      beforeEach('setup complex commit', function() {
+        fse.writeFileSync(this.paths['tracked-file'], 'Hello World');
+
+        utils.execSync('git add tracked-file');
+        utils.execSync('git commit -m "Add tracked-file"');
+        utils.execSync('git rm tracked-file');
+
+        this.context.setupEnvironment();
+      });
+
+      it('deleted the file', function() {
+        this.context.cleanupEnvironment();
+        expect(fse.existsSync(this.paths['tracked-file'])).to.equal(false);
+      });
+    });
+
+    describe('when only a submodule change was staged', function() {
+      beforeEach('setup submodule repo', function() {
+        var submoduleRepo = testHelper.tempRepo();
+        utils.execSync('git commit --allow-empty -m "Initial commit"', {cwd: submoduleRepo});
+
+        utils.execSync('git submodule add ' + submoduleRepo + ' sub 2>&1 > /dev/null');
+        utils.execSync('git commit -m "Add submodule"');
+
+        fse.writeFileSync(path.join(this.repoPath, 'sub', 'submodule-file'), 'Hello World');
+        utils.execSync('git submodule foreach "git add submodule-file" < /dev/null');
+        utils.execSync('git submodule foreach "git config --local commit.gpgsign false"');
+        utils.execSync('git submodule foreach "git commit -m \\"Another commit\\"" < /dev/null');
+        utils.execSync('git add sub');
+
+        utils.execSync('git config diff.submodule short');
+
+        this.context.setupEnvironment();
+      });
+
+      it('keeps staged submodule change', function() {
+        var diffBefore = utils.execSync('git diff --cached');
+        expect(diffBefore).to.match(/-Subproject commit[\s\S]*\+Subproject commit/);
+
+        this.context.cleanupEnvironment();
+
+        var diffAfter = utils.execSync('git diff --cached');
+        expect(diffAfter).to.match(/-Subproject commit[\s\S]*\+Subproject commit/);
+        expect(diffBefore).to.equal(diffAfter);
+      });
+    });
+
+    describe('when submodule changes are staged along with other changes', function() {
+      beforeEach('setup submodule repo', function() {
+        var submoduleRepo = testHelper.tempRepo();
+        utils.execSync('git commit --allow-empty -m "Initial commit"', {cwd: submoduleRepo});
+
+        utils.execSync('git submodule add ' + submoduleRepo + ' sub 2>&1 > /dev/null');
+        utils.execSync('git commit -m "Add submodule"');
+
+        fse.writeFileSync(path.join(this.repoPath, 'sub', 'submodule-file'), 'Hello World');
+        utils.execSync('git submodule foreach "git add submodule-file" < /dev/null');
+        utils.execSync('git submodule foreach "git config --local commit.gpgsign false"');
+        utils.execSync('git submodule foreach "git commit -m \\"Another commit\\"" < /dev/null');
+
+        fse.writeFileSync(this.paths['tracked-file'], 'Hello Again');
+        utils.execSync('git add sub tracked-file');
+
+        utils.execSync('git config diff.submodule short');
+        this.context.setupEnvironment();
+      });
+
+      it('keeps staged submodule change', function() {
+        var diffBefore = utils.execSync('git diff --cached');
+        expect(diffBefore).to.match(/-Subproject commit[\s\S]*\+Subproject commit/);
+
+        this.context.cleanupEnvironment();
+
+        var diffAfter = utils.execSync('git diff --cached');
+        expect(diffAfter).to.match(/-Subproject commit[\s\S]*\+Subproject commit/);
+        expect(diffBefore).to.equal(diffAfter);
+      });
+
+      it('keeps staged file changes', function() {
+        var showOutput = utils.execSync('git show :tracked-file');
+        expect(showOutput).to.equal('Hello Again');
+      });
+    });
+
+    describe('when a submodule removal was staged', function() {
+      beforeEach('setup submodule repo', function() {
+        var submoduleRepo = testHelper.tempRepo();
+        utils.execSync('git commit --allow-empty -m "Initial commit"', {cwd: submoduleRepo});
+
+        utils.execSync('git submodule add ' + submoduleRepo + ' sub 2>&1 > /dev/null');
+        utils.execSync('git commit -m "Add submodule"');
+        utils.execSync('git rm sub');
+
+        this.context.setupEnvironment();
+      });
+
+      it('does not leave behind an empty submodule directory', function() {
+        this.context.cleanupEnvironment();
+
+        expect(fse.existsSync(path.join(this.repoPath, 'sub'))).to.equal(false);
       });
     });
   });

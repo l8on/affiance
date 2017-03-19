@@ -1,5 +1,4 @@
 var path = require('path');
-var fse = require('fs-extra');
 var testHelper = require('../../../test_helper');
 var expect = testHelper.expect;
 var sinon = testHelper.sinon;
@@ -18,10 +17,6 @@ describe('HookContextPrePush', function () {
     this.argv = [this.remoteName, this.remoteUrl];
     this.input = {};
     this.context = new HookContextPrePush(this.config, this.argv, this.input);
-
-    this.oldCwd = process.cwd();
-    this.repoPath = testHelper.tempRepo();
-    process.chdir(this.repoPath);
   });
 
   afterEach('restore sandbox', function () {

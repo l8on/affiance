@@ -100,6 +100,25 @@ function randomHash()  {
   return crypto.createHash('sha1').update(now + random).digest('hex');
 }
 
+function hookPassed(hook, message) {
+  return hookHasResult(hook, 'pass', message);
+}
+
+function hookWarned(hook, message) {
+  return hookHasResult(hook, 'warn', message);
+}
+
+function hookFailed(hook, message) {
+  return hookHasResult(hook, 'fail', message);
+}
+
+function hookHasResult(hook, result, message) {
+  var hookReturnValue = hook.run();
+  var hookResultObject = hook.processHookReturnValue(hookReturnValue);
+
+  return (hookResultObject.status === result && (!message || hookResultObject.output === message));
+}
+
 // Add global beforeEach to clean up memoized values on utils.
 // Ensures each test can setup repos and git directories without handling
 // this cleanup.

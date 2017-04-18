@@ -24,6 +24,11 @@ CommitMsg:
     enabled: true
     description: 'Check subject capitalization'
 
+  EmptyMessage:
+    enabled: true
+    description: 'Check for empty commit message'
+    quiet: true
+
 PreCommit:
   ALL:
     enabled: false

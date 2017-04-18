@@ -65,7 +65,7 @@ PreCommit:
   EsLint:
     enabled: false
     description: 'Analyze with ESLint'
-    required_executable: 'eslint'
+    requiredExecutable: 'eslint'
     flags: ['--format=compact']
     installCommand: 'npm install -g eslint'
     include: '**/*.js'

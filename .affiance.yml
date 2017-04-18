@@ -31,6 +31,12 @@ CommitMsg:
 
 PreCommit:
   ALL:
+    quiet: false
+
+  EsLint:
+    enabled: true
+
+  MergeConflicts:
     enabled: false
 #
 #PostCheckout:

@@ -49,7 +49,7 @@ CommitMsg:
 # created.
 PreCommit:
   ALL:
-    problem_on_unmodified_line: report
+    problemOnUnmodifiedLine: report
     requiresFiles: true
     required: false
     quiet: false
@@ -59,8 +59,16 @@ PreCommit:
     description: 'Analyze with coffeelint'
     requiredExecutable: 'coffeelint'
     flags: ['--reporter=csv']
-    install_command: 'npm install -g coffeelint'
+    installCommand: 'npm install -g coffeelint'
     include: '**/*.coffee'
+
+  EsLint:
+    enabled: false
+    description: 'Analyze with ESLint'
+    required_executable: 'eslint'
+    flags: ['--format=compact']
+    installCommand: 'npm install -g eslint'
+    include: '**/*.js'
 
   MergeConflicts:
     enabled: true

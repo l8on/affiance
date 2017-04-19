@@ -85,7 +85,6 @@ describe('HookContextPostCommit', function () {
       utils.execSync('git add some-file');
       utils.execSync('git commit -m "Modify file"');
 
-
       var modifiedFiles = this.context.modifiedFiles();
       expect(modifiedFiles).to.have.length(1);
       expect(modifiedFiles[0]).to.include('some-file');

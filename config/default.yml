@@ -82,7 +82,9 @@ PreCommit:
     description: "Analyze with stylus linter"
     quiet: false
     requiredExecutable: 'stylint'
-    flags: []
+    flags: ['--reporter', 'stylint-json-reporter']
+    installCommand: 'npm install -g stylint && npm install -g stylint-json-reporter'
+    include: '**/*.styl'
 
 # Hooks that run after HEAD changes or a file is explicitly checked out.
 PostCheckout:

@@ -140,7 +140,7 @@ PostMerge:
 # Hooks that run after a commit is modified by an amend or rebase.
 PostRewrite:
   ALL:
-    requires_files: false
+    requiresFiles: false
     quiet: false
 
 # Hooks that run during `git push`, after remote refs have been updated but

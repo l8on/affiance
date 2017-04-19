@@ -69,6 +69,7 @@ PreCommit:
     flags: ['--format=compact']
     installCommand: 'npm install -g eslint'
     include: '**/*.js'
+    exclude: '*.yml'
 
   MergeConflicts:
     enabled: true

@@ -70,7 +70,7 @@ describe('MessageProcessor', function () {
       beforeEach('setup messages', function() {
         this.messages = [errorMess('node.js', 2)];
         this.context.modifiedLinesInFile = this.sandbox.stub();
-        this.context.modifiedLinesInFile.withArgs('node.js').returns([2]);
+        this.context.modifiedLinesInFile.withArgs('node.js').returns(['2']);
       });
 
       it('returns an error when unmodifiedLinesSetting is report', function() {
@@ -99,7 +99,7 @@ describe('MessageProcessor', function () {
       beforeEach('setup messages', function() {
         this.messages = [errorMess('node.js', 2)];
         this.context.modifiedLinesInFile = this.sandbox.stub();
-        this.context.modifiedLinesInFile.withArgs('node.js').returns([3]);
+        this.context.modifiedLinesInFile.withArgs('node.js').returns(['3']);
       });
 
       it('returns an error when unmodifiedLinesSetting is report', function() {
@@ -128,7 +128,7 @@ describe('MessageProcessor', function () {
       beforeEach('setup messages', function() {
         this.messages = [warnMess('node.js', 2)];
         this.context.modifiedLinesInFile = this.sandbox.stub();
-        this.context.modifiedLinesInFile.withArgs('node.js').returns([2]);
+        this.context.modifiedLinesInFile.withArgs('node.js').returns(['2']);
       });
 
       it('returns an error when unmodifiedLinesSetting is report', function() {
@@ -157,7 +157,7 @@ describe('MessageProcessor', function () {
       beforeEach('setup messages', function() {
         this.messages = [warnMess('node.js', 2)];
         this.context.modifiedLinesInFile = this.sandbox.stub();
-        this.context.modifiedLinesInFile.withArgs('node.js').returns([3]);
+        this.context.modifiedLinesInFile.withArgs('node.js').returns(['3']);
       });
 
       it('returns an error when unmodifiedLinesSetting is report', function() {
@@ -186,8 +186,8 @@ describe('MessageProcessor', function () {
       beforeEach('setup messages', function() {
         this.messages = [errorMess('affiance.js', 2), warnMess('node.js', 3)];
         this.context.modifiedLinesInFile = this.sandbox.stub();
-        this.context.modifiedLinesInFile.withArgs('affiance.js').returns([2]);
-        this.context.modifiedLinesInFile.withArgs('node.js').returns([3, 4]);
+        this.context.modifiedLinesInFile.withArgs('affiance.js').returns(['2']);
+        this.context.modifiedLinesInFile.withArgs('node.js').returns(['3', '4']);
       });
 
       it('returns an error when unmodifiedLinesSetting is report', function() {
@@ -216,8 +216,8 @@ describe('MessageProcessor', function () {
       beforeEach('setup messages', function() {
         this.messages = [errorMess('affiance.js', 2), warnMess('node.js', 3)];
         this.context.modifiedLinesInFile = this.sandbox.stub();
-        this.context.modifiedLinesInFile.withArgs('affiance.js').returns([3]);
-        this.context.modifiedLinesInFile.withArgs('node.js').returns([4, 5]);
+        this.context.modifiedLinesInFile.withArgs('affiance.js').returns(['3']);
+        this.context.modifiedLinesInFile.withArgs('node.js').returns(['4', '5']);
       });
 
       it('returns an error when unmodifiedLinesSetting is report', function() {
@@ -251,8 +251,8 @@ describe('MessageProcessor', function () {
           errorMess('node.js', 5)
         ];
         this.context.modifiedLinesInFile = this.sandbox.stub();
-        this.context.modifiedLinesInFile.withArgs('affiance.js').returns([3, 4]);
-        this.context.modifiedLinesInFile.withArgs('node.js').returns([5, 6]);
+        this.context.modifiedLinesInFile.withArgs('affiance.js').returns(['3', '4']);
+        this.context.modifiedLinesInFile.withArgs('node.js').returns(['5', '6']);
       });
 
       it('returns an error when unmodifiedLinesSetting is report', function() {
@@ -332,8 +332,8 @@ describe('MessageProcessor', function () {
           errorMess('node.js', 5)
         ];
         this.context.modifiedLinesInFile = this.sandbox.stub();
-        this.context.modifiedLinesInFile.withArgs('affiance.js').returns([3, 4]);
-        this.context.modifiedLinesInFile.withArgs('node.js').returns([5, 6]);
+        this.context.modifiedLinesInFile.withArgs('affiance.js').returns(['3', '4']);
+        this.context.modifiedLinesInFile.withArgs('node.js').returns(['5', '6']);
       });
 
       describe('and there are generic errors before line messages', function() {

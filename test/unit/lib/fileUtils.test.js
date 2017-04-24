@@ -34,7 +34,7 @@ describe('fileUtils', function() {
       this.sandbox = sinon.sandbox.create();
 
       this.repoRoot = '/repo/root';
-      this.sandbox.stub(fileUtils, '_repoRoot').returns(this.repoRoot);
+      this.sandbox.stub(fileUtils, 'repoRoot').returns(this.repoRoot);
     });
 
     afterEach('stub repo root', function() {

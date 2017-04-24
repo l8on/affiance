@@ -78,6 +78,14 @@ PreCommit:
     requiredExecutable: 'grep'
     flags: ['-IHn', "^<<<<<<<[ \t]"]
 
+  MochaOnly:
+    enabled: true
+    description: 'Check for .only in mocha tests'
+    quiet: true
+    requiredExecutable: 'grep'
+    flags: ['-IHn', "\.only"]
+    include: 'test/**/*.js'
+
   StylusLint:
     enabled: false
     description: "Analyze with stylus linter"

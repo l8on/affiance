@@ -143,6 +143,16 @@ PostRewrite:
     requiresFiles: false
     quiet: false
 
+  NpmInstall:
+    enabled: false
+    description: 'Install NPM dependencies'
+    requiresFiles: true
+    requiredExecutable: 'npm'
+    flags: ['install']
+    include:
+      - 'package.json'
+      - 'npm-shrinkwrap.json'
+
 # Hooks that run during `git push`, after remote refs have been updated but
 # before any objects have been transferred.
 PrePush:

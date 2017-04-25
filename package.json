@@ -1,6 +1,6 @@
 {
   "name": "affiance",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A configurable and extendable Git hook manager for node projects",
   "main": "lib/index.js",
   "scripts": {

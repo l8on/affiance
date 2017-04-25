@@ -62,6 +62,7 @@ try {
     // If undefined, will use the default condition.
     switch(e.affianceName) {
       case Affiance.error.ConfigurationError:
+      case Affiance.error.ConfigurationSignatureChanged:
         console.log(e.message);
         process.exit(77); // EX_CONFIG
 

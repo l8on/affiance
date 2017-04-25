@@ -3,10 +3,12 @@ env:
   node: true
 extends: 'eslint:recommended'
 rules:
+  no-console: off
   indent:
     - error
     - 2
     - SwitchCase: 1
+      MemberExpression: 1
   linebreak-style:
     - error
     - unix

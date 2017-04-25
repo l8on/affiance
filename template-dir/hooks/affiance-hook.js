@@ -1,11 +1,14 @@
-//process.argv.forEach(function (val, index, array) {
-//    console.log(index + ': ' + val);
-//});
-
 // Get the type of hook from the arguments.
 var hookType = process.argv[2];
 // Capture original args sent to hook script
 var originalArgs = process.argv.slice(3);
+
+
+// Allow hooks to be disabled via environment variable so git commands can be run
+// in scripts without Affiance running hooks
+if (process.env.AFFIANCE_DISABLE || process.env.AFFIANCE_DISABLED) {
+  process.exit();
+}
 
 // Exit early if the `affiance-hook` file was invoked directly.
 if (hookType === 'affiance-hook') {

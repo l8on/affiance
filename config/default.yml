@@ -20,7 +20,7 @@ concurrency: '%{processors}'
 # runs except in the case of warning or failure.
 quiet: false
 
-# Whether to check if a hook plugin has changed since Overcommit last ran it.
+# Whether to check if a hook plugin has changed since Affiance last ran it.
 # This is a defense mechanism when working with repositories which can contain
 # untrusted code (e.g. when you fetch a pull request from a third party).
 # See https://github.com/l8on/affiance#security for more information.

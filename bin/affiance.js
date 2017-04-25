@@ -38,6 +38,11 @@ program.command('sign')
     }).run();
   });
 
+program.command('version')
+  .description('Output current version of affiance')
+  .action(function(_commandOptions) {
+    console.log(require('../package.json').version);
+  });
 
 program.parse(process.argv);
 

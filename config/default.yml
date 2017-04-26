@@ -83,7 +83,7 @@ PreCommit:
     description: 'Check for .only in mocha tests'
     quiet: true
     requiredExecutable: 'grep'
-    flags: ['-IHn', '.only']
+    flags: ['-EIHn', '(it|describe)\.only']
     include: 'test/**/*.js'
 
   StylusLint:

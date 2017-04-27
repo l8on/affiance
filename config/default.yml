@@ -91,6 +91,7 @@ PreCommit:
     description: "Analyze with stylus linter"
     quiet: false
     requiredExecutable: 'stylint'
+    requiredLibrary: 'stylint-json-reporter'
     flags: ['--reporter', 'stylint-json-reporter']
     installCommand: 'npm install -g stylint && npm install -g stylint-json-reporter'
     include: '**/*.styl'

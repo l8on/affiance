@@ -12,7 +12,7 @@
 #
 # For a complete list of options that you can use to customize hooks, see:
 # https://github.com/l8on/affiance#configuration
-#
+
 # Uncomment the following lines to make the configuration take effect.
 
 CommitMsg:

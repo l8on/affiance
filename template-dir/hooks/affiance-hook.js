@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 // Get the type of hook from the arguments.
 var hookType = process.argv[2];
 // Capture original args sent to hook script
@@ -67,7 +67,6 @@ function handleErrorAndExit(e) {
 
 // Capture unhandled Rejections as well
 process.on('unhandledRejection', (e, p) => {
-  console.log('~~~~ process unhandledRejection', p);
   handleErrorAndExit(e);
 });
 
@@ -95,37 +94,13 @@ try {
     var printer = new Affiance.Printer(config, logger, hookContext);
     var hookRunner = new Affiance.HookRunner(config, logger, hookContext, printer);
 
-    process.on('exit', function(code) { console.log('~~~~~process exited', code)});
-
-    // catches ctrl+c event
-    process.on('SIGINT', function() { console.log('~~~~~process siginted'); process.exit(); });
-
-    //catches uncaught exceptions
-    process.on('uncaughtException', function(e) { console.log('~~~~~process uncaughtExceptioned', e)});
-    process.on('unhandledRejection', function(reason, p) { console.log('~~~~~process unhandledRejection', reason, p)});
-    process.on('rejectionHandled', function() { console.log('~~~~~process rejectionHandled')});
-
-    console.log('in affiance-hook.js before statusPromise');
     var statusPromise = hookRunner.run();
-    console.log('in affiance-hook.js after statusPromise', statusPromise);
 
     statusPromise.then(function(result) {
-      console.log('in affiance-hook.js statusPromise#then', result);
       // We finished, use the result
       process.exit(result ? 0 : 65); // EX_DATAERR
-
-    }).catch(function(result) {
-      console.log('in affiance-hook.js statusPromise#catch', result);
-      if (e.stack) { console.log(result.stack); }
-      // If an affiance error was thrown, rethrow error so it is caught in block below.
-      if (typeof result === 'object') { throw result; }
-
-      // Something went wrong!
-      console.log('in affiance-hook.js statusPromise#catch', result);
-      process.exit(65); // EX_DATAERR
-    });
+    }).catch(handleErrorAndExit);
 
 } catch (e) {
-  console.log('in affiance-hook.js catch block');
   handleErrorAndExit(e);
 }

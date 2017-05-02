@@ -35,6 +35,8 @@ PreCommit:
 
   EsLint:
     enabled: true
+    parallelize: true
+    processors: 2
 
   MochaOnly:
     enabled: true

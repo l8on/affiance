@@ -1,12 +1,13 @@
-var testHelper = require('../../../../test_helper');
-var fse = require('fs-extra');
-var path = require('path');
-var expect = testHelper.expect;
-var sinon = testHelper.sinon;
-var MergeConflicts = testHelper.requireSourceModule(module);
-var Config = testHelper.requireSourceModule(module, 'lib/config');
-var HookContextPreCommit = testHelper.requireSourceModule(module, 'lib/hook-context/pre-commit');
-var utils = testHelper.requireSourceModule(module, 'lib/utils');
+'use strict';
+const testHelper = require('../../../../test_helper');
+const fse = require('fs-extra');
+const path = require('path');
+const expect = testHelper.expect;
+const sinon = testHelper.sinon;
+const MergeConflicts = testHelper.requireSourceModule(module);
+const Config = testHelper.requireSourceModule(module, 'lib/config');
+const HookContextPreCommit = testHelper.requireSourceModule(module, 'lib/hook-context/pre-commit');
+const utils = testHelper.requireSourceModule(module, 'lib/utils');
 
 describe('MergeConflicts', function () {
   beforeEach('setup hook context', function() {
@@ -34,36 +35,39 @@ describe('MergeConflicts', function () {
   });
 
   it('fails when the file contains a merge conflict marker', function() {
-    var filePath = path.join(this.repoPath, this.stagedFile);
+    let filePath = path.join(this.repoPath, this.stagedFile);
     fse.writeFileSync(filePath, 'Just\n<<<<<<< HEAD:filename.txt\nconflicting text');
 
     utils.execSync('git add ' + this.stagedFile);
     this.hook.applicableFiles.returns([filePath]);
 
-    var hookResult = this.hook.run();
-    expect(hookResult).to.have.length(2);
-    expect(hookResult[0]).to.equal('fail');
+    return this.hook.run().then((hookResult) => {
+      expect(hookResult).to.have.length(2);
+      expect(hookResult[0]).to.equal('fail');
+    });
   });
 
   it('passes when the file has no merge conflicts', function() {
-    var filePath = path.join(this.repoPath, this.stagedFile);
+    let filePath = path.join(this.repoPath, this.stagedFile);
     fse.writeFileSync(filePath, 'Just some text, yo');
 
     utils.execSync('git add ' + this.stagedFile);
     this.hook.applicableFiles.returns([filePath]);
 
-    var hookResult = this.hook.run();
-    expect(hookResult).to.equal('pass');
+    return this.hook.run().then((hookResult) => {
+      expect(hookResult).to.equal('pass');
+    });
   });
 
   it('passes when the file almost has conflict markers', function() {
-    var filePath = path.join(this.repoPath, this.stagedFile);
+    let filePath = path.join(this.repoPath, this.stagedFile);
     fse.writeFileSync(filePath, 'Just some <<<<<<<<<<< arrows, yo');
 
     utils.execSync('git add ' + this.stagedFile);
     this.hook.applicableFiles.returns([filePath]);
 
-    var hookResult = this.hook.run();
-    expect(hookResult).to.equal('pass');
+    return this.hook.run().then((hookResult) => {
+      expect(hookResult).to.equal('pass');
+    });
   });
 });

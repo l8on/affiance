@@ -1,7 +1,5 @@
 # Affiance Changelog
 
-## master
-
 ## 1.1.0
 #### New Features
 * Affiance now requires node >= 4 with a v8 engine that supports es6 features

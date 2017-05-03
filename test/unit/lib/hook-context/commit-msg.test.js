@@ -1,9 +1,10 @@
-var testHelper = require('../../../test_helper');
-var expect = testHelper.expect;
-var sinon = testHelper.sinon;
-var HookContextCommitMsg = testHelper.requireSourceModule(module);
-var Config = testHelper.requireSourceModule(module, 'lib/config');
-var gitRepo = testHelper.requireSourceModule(module, 'lib/gitRepo');
+'user strict';
+const testHelper = require('../../../test_helper');
+const expect = testHelper.expect;
+const sinon = testHelper.sinon;
+const HookContextCommitMsg = testHelper.requireSourceModule(module);
+const Config = testHelper.requireSourceModule(module, 'lib/config');
+const gitRepo = testHelper.requireSourceModule(module, 'lib/gitRepo');
 
 describe('HookContextCommitMsg', function () {
   beforeEach('setup hook context', function() {

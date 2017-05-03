@@ -7,6 +7,7 @@
 * Affiance now requires node >= 4 with a v8 engine that supports es6 features
 * Better performance with non-blocking process spawning for pre commit hooks
 * Number of parallel processes is limited by the `concurrency` configuration
+* Use local node module binaries id default.yml file
 
 ## 1.0.10
 * Fix StylusLint output

@@ -47,9 +47,10 @@ describe('MochaOnly', function () {
     utils.execSync('git add ' + this.stagedFile);
     this.hook.applicableFiles.returns([filePath]);
 
-    var hookResult = this.hook.run();
-    expect(hookResult).to.have.length(2);
-    expect(hookResult[0]).to.equal('fail');
+    return this.hook.run().then((hookResult) => {
+      expect(hookResult).to.have.length(2);
+      expect(hookResult[0]).to.equal('fail');
+    });
   });
 
   it('fails when the file contains a specific describe with a .only', function() {
@@ -66,9 +67,10 @@ describe('MochaOnly', function () {
     utils.execSync('git add ' + this.stagedFile);
     this.hook.applicableFiles.returns([filePath]);
 
-    var hookResult = this.hook.run();
-    expect(hookResult).to.have.length(2);
-    expect(hookResult[0]).to.equal('fail');
+    return this.hook.run().then((hookResult) => {
+      expect(hookResult).to.have.length(2);
+      expect(hookResult[0]).to.equal('fail');
+    });
   });
 
   it('passes when the file contains an only in a test description', function() {
@@ -85,7 +87,8 @@ describe('MochaOnly', function () {
     utils.execSync('git add ' + this.stagedFile);
     this.hook.applicableFiles.returns([filePath]);
 
-    var hookResult = this.hook.run();
-    expect(hookResult).to.equal('pass');
+    return this.hook.run().then((hookResult) => {
+      expect(hookResult).to.equal('pass');
+    });
   });
 });

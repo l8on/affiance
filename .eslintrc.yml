@@ -4,7 +4,6 @@ env:
   node: true
 extends: 'eslint:recommended'
 rules:
-  no-console: off
   indent:
     - error
     - 2
@@ -13,6 +12,14 @@ rules:
   linebreak-style:
     - error
     - unix
+  no-console: off
+  no-unused-vars:
+    - error
+    - args: all
+      argsIgnorePattern: ^_
+      varsIgnorePattern: ^_
+  no-var:
+    - error
   quotes:
     - error
     - single
@@ -20,8 +27,3 @@ rules:
   semi:
     - error
     - always
-  no-unused-vars:
-    - error
-    - args: all
-      argsIgnorePattern: ^_
-      varsIgnorePattern: ^_

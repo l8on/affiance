@@ -41,10 +41,3 @@ PreCommit:
   MochaOnly:
     enabled: true
     exclude: '**/MochaOnly.test.js'
-#
-#PostCheckout:
-#  ALL: # Special hook name that customizes all hooks of this type
-#    quiet: true # Change all post-checkout hooks to only display output on failure
-#
-#  NpmUpdate: # Check if node modules are up to date on checkout.
-#    enabled: true # Generate a tags file with `ctags` each time HEAD changes

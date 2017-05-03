@@ -93,7 +93,7 @@ PreCommit:
     requiredExecutable: 'stylint'
     requiredLibrary: 'stylint-json-reporter'
     flags: ['--reporter', 'stylint-json-reporter']
-    installCommand: 'npm install -g stylint && npm install -g stylint-json-reporter'
+    installCommand: 'npm install -g stylint && npm install stylint-json-reporter'
     include: '**/*.styl'
 
 # Hooks that run after HEAD changes or a file is explicitly checked out.

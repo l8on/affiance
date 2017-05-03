@@ -1,7 +1,7 @@
-var testHelper = require('../../test_helper');
-var expect = testHelper.expect;
-var sinon = testHelper.sinon;
-var utils = testHelper.requireSourceModule(module);
+'use strict';
+const testHelper = require('../../test_helper');
+const expect = testHelper.expect;
+const utils = testHelper.requireSourceModule(module);
 
 describe('utils', function() {
   describe('camelCase', function() {
@@ -35,16 +35,16 @@ describe('utils', function() {
     });
 
     it('keeps any options without defaults', function() {
-      var newOptions = utils.mergeOptions({weird: 'option'}, this.defaultOptions);
+      let newOptions = utils.mergeOptions({weird: 'option'}, this.defaultOptions);
       expect(newOptions).to.have.property('weird', 'option');
 
-      for (var key in this.defaultOptions) {
+      for (let key in this.defaultOptions) {
         expect(newOptions[key]).to.deep.equal(this.defaultOptions[key]);
       }
     });
 
     it('keeps any options that override defaults', function() {
-      var newOptions = utils.mergeOptions({option1: 2, optionObj: {optionObjA: 'C'}}, this.defaultOptions);
+      let newOptions = utils.mergeOptions({option1: 2, optionObj: {optionObjA: 'C'}}, this.defaultOptions);
 
       expect(newOptions).to.have.property('optionA', 'A');
       expect(newOptions).to.have.property('option1', 2);
@@ -69,20 +69,43 @@ describe('utils', function() {
 
   describe('execSync', function() {
     it('executes the command and returns the output as a string', function() {
-      var commandResult = utils.execSync('echo Hello World');
+      let commandResult = utils.execSync('echo Hello World');
       expect(commandResult).to.be.a('String');
       expect(commandResult).to.equal('Hello World\n');
     });
 
     it('returns false if the command fails', function() {
-      var commandResult = utils.execSync('someunknowncommandthatnooneshouldhaveinstalled');
+      let commandResult = utils.execSync('someunknowncommandthatnooneshouldhaveinstalled');
       expect(commandResult).to.equal(false);
+    });
+  });
+
+  describe('spawn', function() {
+    it('executes the command in a non blocking way and returns the ChildProcess object', function(done) {
+      let commandResult = utils.spawn('echo', ['Hello', 'World']);
+      let output = '';
+      commandResult.stdout.on('data', (data) => { output += data; });
+      commandResult.on('close', (code, signal) => {
+        expect(code).to.equal(0);
+        expect(signal).to.not.exist;
+        expect(output).to.equal('Hello World\n');
+        done();
+      });
+      commandResult.on('error', done);
+    });
+
+    it('emits an error from the returned childProcess if the command fails', function(done) {
+      let commandResult = utils.spawn('someunknowncommandthatnooneshouldhaveinstalled');
+      commandResult.on('error',(err) => {
+        expect(err).to.exist;
+        done();
+      });
     });
   });
 
   describe('spawnSync', function() {
     it('executes the command and returns the spawned object', function() {
-      var commandResult = utils.spawnSync('echo', ['Hello', 'World']);
+      let commandResult = utils.spawnSync('echo', ['Hello', 'World']);
       expect(commandResult).to.be.a('Object');
       expect(commandResult.error).to.not.exist;
       expect(commandResult.status).to.equal(0);
@@ -91,7 +114,7 @@ describe('utils', function() {
     });
 
     it('executes the command and returns the spawned object with an error if the command does not exist', function() {
-      var commandResult = utils.spawnSync('someunknowncommandthatnooneshouldhaveinstalled');
+      let commandResult = utils.spawnSync('someunknowncommandthatnooneshouldhaveinstalled');
       expect(commandResult).to.be.a('Object');
       expect(commandResult.error).to.exist;
       expect(commandResult.error).to.have.property('code', 'ENOENT');

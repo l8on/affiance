@@ -48,13 +48,12 @@ describe('fileUtils', function() {
 
   describe('matchesPath', function() {
     it('returns true if the glob matches the provided path', function() {
-      expect(fileUtils.matchesPath('test', __dirname)).to.equal(true);
-      expect(fileUtils.matchesPath('test*', __dirname)).to.equal(true);
+      expect(fileUtils.matchesPath(fileUtils.convertGlobToAbsolute('test/**'), __dirname)).to.equal(true);
       expect(fileUtils.matchesPath(__dirname + '/fileUtils*', module.filename)).to.equal(true);
     });
 
     it('returns false if the glob does not match the provided path', function() {
-      expect(fileUtils.matchesPath('*best*', __dirname)).to.equal(false);
+      expect(fileUtils.matchesPath(fileUtils.convertGlobToAbsolute('*best*'), __dirname)).to.equal(false);
       expect(fileUtils.matchesPath(__dirname + '/fileUtils.integration*', module.filename)).to.equal(false);
       expect(fileUtils.matchesPath(__dirname + '/fileUtilities*', module.filename)).to.equal(false);
     });

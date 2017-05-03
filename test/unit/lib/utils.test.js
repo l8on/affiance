@@ -84,7 +84,7 @@ describe('utils', function() {
     it('executes the command and returns the spawned object', function() {
       var commandResult = utils.spawnSync('echo', ['Hello', 'World']);
       expect(commandResult).to.be.a('Object');
-      expect(commandResult.error).to.not.exist
+      expect(commandResult.error).to.not.exist;
       expect(commandResult.status).to.equal(0);
       expect(commandResult.stdout.toString()).to.equal('Hello World\n');
       expect(commandResult.stderr.toString()).to.equal('');
@@ -93,7 +93,7 @@ describe('utils', function() {
     it('executes the command and returns the spawned object with an error if the command does not exist', function() {
       var commandResult = utils.spawnSync('someunknowncommandthatnooneshouldhaveinstalled');
       expect(commandResult).to.be.a('Object');
-      expect(commandResult.error).to.exist
+      expect(commandResult.error).to.exist;
       expect(commandResult.error).to.have.property('code', 'ENOENT');
     });
   });

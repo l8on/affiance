@@ -8,7 +8,6 @@ const HookContextPreCommit = testHelper.requireSourceModule(module, 'lib/hook-co
 
 describe('CoffeeLint', function () {
   beforeEach('setup hook context', function() {
-    this.timeout(5000);
     this.sandbox = sinon.sandbox.create();
     this.config = new Config({});
     this.context = new HookContextPreCommit(this.config, [], {});

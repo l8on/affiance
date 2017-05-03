@@ -1,4 +1,5 @@
 # affiance
+
 A tool to manage and configure [Git hooks](http://git-scm.com/book/en/Customizing-Git-Git-Hooks)
 
 Inspired by and shamelessly ported from [Overcommit](https://github.com/brigade/overcommit).
@@ -9,6 +10,7 @@ repository, but, unlike regular Git hooks, are stored in source control. You can
 also easily [add your existing hook scripts](#adding-existing-git-hooks) without
 writing any Javascript code.
 
+* [Definition](#definition)
 * [Requirements](#requirements)
   * [Dependencies](#dependencies)
 * [Limitations](#limitations)
@@ -36,17 +38,17 @@ writing any Javascript code.
 * [Changelog](#changelog)
 * [License](#license)
 
+## Definition
+####*affiance*
+>_v._ to pledge by promise of marriage; betroth.<br/>
+>_n._ trust; confidence; reliance.
+
 ## Requirements
 
 This project aims to support the following node versions runtimes on \*nix machines:
 * Node 4+
 
 Windows is not yet supported, but could be with your help!
-
-## Limitations
-
-Affiance does not currently support
-[`git-worktree`](https://git-scm.com/docs/git-worktree).
 
 ### Dependencies
 
@@ -57,6 +59,11 @@ Some of the hooks have third-party dependencies. For example, to lint your
 Depending on the hooks you enable/disable for your repository, you'll need to
 ensure your development environment already has those dependencies installed.
 Most hooks will display a warning if a required executable isn't available.
+
+## Limitations
+
+Affiance does not currently support
+[`git-worktree`](https://git-scm.com/docs/git-worktree).
 
 ## Installation
 
@@ -85,15 +92,17 @@ affiance sign # See Security section below for explanation
 
 ### Repo specific installation
 
-Like most npm modules, Affiance can indeed be installed locally. In a team
-context where multiple repos are involved, using global modules is not tenable
+Like most npm modules, Affiance can (and usually should) be installed locally. In a team
+context where multiple repos are involved, using global modules is not sustainable
 as each repo may have different requirements.
 The caveat is that if Affiance is not installed globally, the binary from the
 `./node_modules/.bin` directory must be used to run the various installation
 commands.
 Affiance assumes this is the default, so all error messages from affiance will
 encourage you to run the command from the local binary instead of the global
-binary.
+binary. Affiance also opinionatedly assumes that other node modules will be installed
+locally. If you want to use the global binary, change the `requiredExecutable` property
+of the hook in question.
 
 ```bash
 mkdir important-project

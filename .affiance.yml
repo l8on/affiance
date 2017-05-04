@@ -39,3 +39,7 @@ PreCommit:
   MochaOnly:
     enabled: true
     exclude: '**/MochaOnly.test.js'
+
+#PostCheckout:
+#  NpmOutdated:
+#    enabled: true

@@ -1,3 +1,4 @@
+'use strict';
 const testHelper = require('../../../../test_helper');
 const fse = require('fs-extra');
 const path = require('path');

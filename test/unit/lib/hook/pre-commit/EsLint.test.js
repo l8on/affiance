@@ -18,7 +18,7 @@ describe('EsLint', function() {
       stderr: '',
       stdout: ''
     };
-    this.sandbox.stub(this.hook, 'spawnConcurrentCommandsOnApplicableFiles').returns(Promise.resolve(this.result));
+    this.sandbox.stub(this.hook, 'spawnPromiseOnApplicableFiles').returns(Promise.resolve(this.result));
   });
 
   afterEach('restore sandbox', function() {

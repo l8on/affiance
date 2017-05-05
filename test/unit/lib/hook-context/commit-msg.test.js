@@ -1,4 +1,4 @@
-'user strict';
+'use strict';
 const testHelper = require('../../../test_helper');
 const expect = testHelper.expect;
 const sinon = testHelper.sinon;

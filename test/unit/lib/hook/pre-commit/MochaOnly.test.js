@@ -1,12 +1,12 @@
-var testHelper = require('../../../../test_helper');
-var fse = require('fs-extra');
-var path = require('path');
-var expect = testHelper.expect;
-var sinon = testHelper.sinon;
-var MochaOnly = testHelper.requireSourceModule(module);
-var Config = testHelper.requireSourceModule(module, 'lib/config');
-var HookContextPreCommit = testHelper.requireSourceModule(module, 'lib/hook-context/pre-commit');
-var utils = testHelper.requireSourceModule(module, 'lib/utils');
+const testHelper = require('../../../../test_helper');
+const fse = require('fs-extra');
+const path = require('path');
+const expect = testHelper.expect;
+const sinon = testHelper.sinon;
+const MochaOnly = testHelper.requireSourceModule(module);
+const Config = testHelper.requireSourceModule(module, 'lib/config');
+const HookContextPreCommit = testHelper.requireSourceModule(module, 'lib/hook-context/pre-commit');
+const utils = testHelper.requireSourceModule(module, 'lib/utils');
 
 describe('MochaOnly', function () {
   beforeEach('setup hook context', function() {

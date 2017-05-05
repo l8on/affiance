@@ -34,9 +34,9 @@ describe('MochaOnly', function () {
   });
 
   it('fails when the file contains a specific test with a .only', function() {
-    var filePath = path.join(this.repoPath, this.stagedFile);
+    let filePath = path.join(this.repoPath, this.stagedFile);
     fse.writeFileSync(filePath, [
-      "var helper = require('helper');",
+      "let helper = require('helper');",
       "describe('some test', function() {",
       "  it.only('does some stuff', function(done) {",
       '    expect(helper).to.have.been.called;',
@@ -54,9 +54,9 @@ describe('MochaOnly', function () {
   });
 
   it('fails when the file contains a specific describe with a .only', function() {
-    var filePath = path.join(this.repoPath, this.stagedFile);
+    let filePath = path.join(this.repoPath, this.stagedFile);
     fse.writeFileSync(filePath, [
-      "var helper = require('helper');",
+      "let helper = require('helper');",
       "describe.only('some test', function() {",
       "  it('does some stuff', function(done) {",
       '    expect(helper).to.have.been.called;',
@@ -74,9 +74,9 @@ describe('MochaOnly', function () {
   });
 
   it('passes when the file contains an only in a test description', function() {
-    var filePath = path.join(this.repoPath, this.stagedFile);
+    let filePath = path.join(this.repoPath, this.stagedFile);
     fse.writeFileSync(filePath, [
-      "var helper = require('helper');",
+      "let helper = require('helper');",
       "describe('some test', function() {",
       "  it('does only this thing', function(done) {",
       '    expect(helper).to.have.been.called;',

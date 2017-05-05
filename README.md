@@ -39,7 +39,7 @@ writing any Javascript code.
 * [License](#license)
 
 ## Definition
-####*affiance*
+### _affiance_
 >_v._ to pledge by promise of marriage; betroth.<br/>
 >_n._ trust; confidence; reliance.
 

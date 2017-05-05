@@ -1,14 +1,22 @@
 # Affiance Changelog
 
+## 1.2.0
+### New Features
+* Affiance has gone all in on es6
+* Affiance is pot-committed on typed jsdocs, all hook classes are documented
+
+### Bugs Fixed
+* Issues with parallelizing some hooks
+
 ## 1.1.0
-#### New Features
+### New Features
 * Affiance now requires node >= 4 with a v8 engine that supports es6 features
 * Better performance with non-blocking process spawning for pre commit hooks
 * Number of parallel processes is limited by the `concurrency` configuration
 * Use local node module binaries id default.yml file
 
-## 1.0.10
-* Fix StylusLint output
+## 1.0.11
+* Fix MERGE_HEAD corruption
 
 ## 1.0.10
 * Fix StylusLint output

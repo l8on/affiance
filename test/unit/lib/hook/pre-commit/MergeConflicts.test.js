@@ -21,6 +21,7 @@ describe('MergeConflicts', function () {
     this.hook = new MergeConflicts(this.config, this.context);
     this.stagedFile = 'filename.txt';
 
+    this.sandbox.stub(this.config, 'concurrency').returns(1);
     this.sandbox.stub(this.hook, 'command').returns('grep');
     this.sandbox.stub(this.hook, 'flags').returns(['-IHn', '^<<<<<<<[ \t]']);
     this.sandbox.stub(this.hook, 'applicableFiles');

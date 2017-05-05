@@ -15,6 +15,7 @@ describe('CoffeeLint', function () {
 
     this.result = {
       status: 0,
+      signal: null,
       stderr: '',
       stdout: ''
     };
@@ -25,30 +26,28 @@ describe('CoffeeLint', function () {
     this.sandbox.restore();
   });
 
-  it('passes when there are no messages output', function(done) {
+  it('passes when there are no messages output', function() {
     this.result.stdout = 'path,lineNumber,lineNumberEnd,level,message';
-    this.hook.run().then((hookResults) => {
+    return this.hook.run().then((hookResults) => {
       expect(hookResults).to.deep.equal([]);
-      done();
-    }, done);
+    });
   });
 
-  it('warns when there are messages output', function(done) {
+  it('warns when there are messages output', function() {
     this.result.stdout = [
       'path,lineNumber,lineNumberEnd,level,message',
       'file1.coffee,31,,warn,Comprehensions must have parentheses around them',
       ''
     ].join('\n');
 
-    this.hook.run().then((hookResults) => {
+    return this.hook.run().then((hookResults) => {
       expect(hookResults).to.have.length(1);
       let hookResult = hookResults[0];
       expect(hookResult).to.have.property('content', 'file1.coffee,31,,warn,Comprehensions must have parentheses around them');
       expect(hookResult).to.have.property('file', 'file1.coffee');
       expect(hookResult).to.have.property('line', 31);
       expect(hookResult).to.have.property('type', 'warning');
-      done();
-    }, done);
+    });
   });
 
   it('fails when there is an error in the output', function() {

@@ -1,25 +1,26 @@
-var _ = require('lodash');
-var path = require('path');
-var testHelper = require('../../../test_helper');
-var expect = testHelper.expect;
-var sinon = testHelper.sinon;
-var Config = testHelper.requireSourceModule(module);
-var gitRepo = testHelper.requireSourceModule(module, 'lib/gitRepo');
+'use strict';
+const _ = require('lodash');
+const path = require('path');
+const testHelper = require('../../../test_helper');
+const expect = testHelper.expect;
+const sinon = testHelper.sinon;
+const Config = testHelper.requireSourceModule(module);
+const gitRepo = testHelper.requireSourceModule(module, 'lib/gitRepo');
 
 describe('Config', function() {
   describe('constructor', function() {
     it('creates sections for hook types that are not defined', function() {
-      var config = new Config({});
+      let config = new Config({});
       expect(config.json['PreCommit']).to.exist;
     });
 
     it('creates an ALL key for hook types', function() {
-      var config = new Config({});
+      let config = new Config({});
       expect(config.json['PreCommit']['ALL']).to.exist;
     });
 
     it('converts empty values to empty hashes', function() {
-      var config = new Config({
+      let config = new Config({
         PreCommit: {
           SomeHook: null
         }
@@ -34,7 +35,7 @@ describe('Config', function() {
     });
 
     it('returns an equivalent object if parent and child are the same', function() {
-      var child = {
+      let child = {
         'pluginDirectory': 'some-directory',
         'PreCommit': {
           'SomeHook': {
@@ -43,7 +44,7 @@ describe('Config', function() {
         }
       };
 
-      var parent = child;
+      let parent = child;
       expect(Config.smartMerge(parent, child)).to.deep.equal(child);
       expect(Config.smartMerge(parent, child)).to.deep.equal(parent);
     });
@@ -71,7 +72,7 @@ describe('Config', function() {
         });
 
         it('merges the 2 objects', function() {
-          var mergedConfigJson = Config.smartMerge(this.parent, this.child);
+          let mergedConfigJson = Config.smartMerge(this.parent, this.child);
           expect(mergedConfigJson).to.have.property('PreCommit');
           expect(mergedConfigJson['PreCommit']).to.have.property('SomeHook').that.deep.equals({
             'someValue': 1
@@ -94,7 +95,7 @@ describe('Config', function() {
         });
 
         it('merges the 2 objects', function() {
-          var mergedConfigJson = Config.smartMerge(this.parent, this.child);
+          let mergedConfigJson = Config.smartMerge(this.parent, this.child);
           expect(mergedConfigJson).to.have.property('PreCommit');
           expect(mergedConfigJson['PreCommit']).to.have.property('SomeHook').that.deep.equals({
             'someValue': 1
@@ -117,7 +118,7 @@ describe('Config', function() {
         });
 
         it('merges the 2 objects', function() {
-          var mergedConfigJson = Config.smartMerge(this.parent, this.child);
+          let mergedConfigJson = Config.smartMerge(this.parent, this.child);
           expect(mergedConfigJson).to.have.property('PreCommit');
           expect(mergedConfigJson).to.have.property('CommitMsg');
           expect(mergedConfigJson['PreCommit']).to.have.property('SomeHook').that.deep.equals({
@@ -144,7 +145,7 @@ describe('Config', function() {
         });
 
         it('overrides the value in the parent item', function() {
-          var mergedConfigJson = Config.smartMerge(this.parent, this.child);
+          let mergedConfigJson = Config.smartMerge(this.parent, this.child);
 
           expect(mergedConfigJson).to.have.property('PreCommit');
           expect(mergedConfigJson['PreCommit']).to.have.property('SomeHook').that.deep.equals({
@@ -181,7 +182,7 @@ describe('Config', function() {
         });
 
         it('overrides the value in the parent item', function() {
-          var mergedConfigJson = Config.smartMerge(this.parent, this.child);
+          let mergedConfigJson = Config.smartMerge(this.parent, this.child);
           expect(mergedConfigJson).to.have.property('PreCommit');
           expect(mergedConfigJson['PreCommit']).to.have.property('SomeHook');
           expect(mergedConfigJson['PreCommit']['SomeHook'])
@@ -201,7 +202,7 @@ describe('Config', function() {
         });
 
         it('overrides the value in the parent item', function() {
-          var mergedConfigJson = Config.smartMerge(this.parent, this.child);
+          let mergedConfigJson = Config.smartMerge(this.parent, this.child);
           expect(mergedConfigJson).to.have.property('PreCommit');
           expect(mergedConfigJson['PreCommit']).to.have.property('SomeHook');
           expect(mergedConfigJson['PreCommit']['SomeHook']).to.have.property('list', 4)
@@ -218,7 +219,7 @@ describe('Config', function() {
     });
 
     it('returns the absolute path to the plugin directory', function() {
-      var expectedPath = path.join(gitRepo.repoRoot(), 'some-directory');
+      let expectedPath = path.join(gitRepo.repoRoot(), 'some-directory');
       expect(this.config.pluginDirectory()).to.equal(expectedPath);
     });
   });
@@ -288,7 +289,7 @@ describe('Config', function() {
     });
 
     it('returns an empty list if there are no built in hooks', function () {
-      var enabledBuiltInHooks = this.config.enabledBuiltInHooks(this.context);
+      let enabledBuiltInHooks = this.config.enabledBuiltInHooks(this.context);
       expect(enabledBuiltInHooks).to.deep.equal([]);
     });
 
@@ -298,7 +299,7 @@ describe('Config', function() {
       this.config.isBuiltInHook.withArgs(this.context, 'SomeOtherHook').returns(true);
       this.config.isBuiltInHook.withArgs(this.context, 'SomeDisabledHook').returns(true);
 
-      var enabledBuiltInHooks = this.config.enabledBuiltInHooks(this.context);
+      let enabledBuiltInHooks = this.config.enabledBuiltInHooks(this.context);
       expect(enabledBuiltInHooks).to.have.length(2);
       expect(enabledBuiltInHooks).to.include('SomeHook');
       expect(enabledBuiltInHooks).to.include('SomeOtherHook');
@@ -345,7 +346,7 @@ describe('Config', function() {
     });
 
     it('returns an empty list if there are no ad hoc hooks', function() {
-      var enabledAdHocHooks = this.config.enabledAdHocHooks(this.context);
+      let enabledAdHocHooks = this.config.enabledAdHocHooks(this.context);
       expect(enabledAdHocHooks).to.deep.equal([]);
     });
 
@@ -355,7 +356,7 @@ describe('Config', function() {
       this.config.isAdHocHook.withArgs(this.context, 'SomeOtherAdHocHook').returns(true);
       this.config.isAdHocHook.withArgs(this.context, 'SomeDisabledHook').returns(true);
 
-      var enabledAdHocHooks = this.config.enabledAdHocHooks(this.context);
+      let enabledAdHocHooks = this.config.enabledAdHocHooks(this.context);
       expect(enabledAdHocHooks).to.have.length(2);
       expect(enabledAdHocHooks).to.include('SomeAdHocHook');
       expect(enabledAdHocHooks).to.include('SomeOtherAdHocHook');
@@ -405,21 +406,21 @@ describe('Config', function() {
 
       it('sets the skip option of the hook to true', function() {
         this.config.applyEnvironment(this.hookContext, this.env);
-        var hookConfig = this.config.forHook('AuthorName', 'PreCommit');
+        let hookConfig = this.config.forHook('AuthorName', 'PreCommit');
         expect(hookConfig).to.have.property('skip', true);
       });
 
       it('sets the skip option of the hook to true if spelled with underscores', function() {
         this.env = {'SKIP': 'author_name'};
         this.config.applyEnvironment(this.hookContext, this.env);
-        var hookConfig = this.config.forHook('AuthorName', 'PreCommit');
+        let hookConfig = this.config.forHook('AuthorName', 'PreCommit');
         expect(hookConfig).to.have.property('skip', true);
       });
 
       it('sets the skip option of the hook to true if spelled with dashes', function() {
         this.env = {'SKIP': 'author-name'};
         this.config.applyEnvironment(this.hookContext, this.env);
-        var hookConfig = this.config.forHook('AuthorName', 'PreCommit');
+        let hookConfig = this.config.forHook('AuthorName', 'PreCommit');
         expect(hookConfig).to.have.property('skip', true);
       });
     });
@@ -431,7 +432,7 @@ describe('Config', function() {
 
       it('sets the skip option of the ALL section to true', function() {
         this.config.applyEnvironment(this.hookContext, this.env);
-        var hookConfig = this.config.forHook('ALL', 'PreCommit');
+        let hookConfig = this.config.forHook('ALL', 'PreCommit');
         expect(hookConfig).to.have.property('skip', true);
       });
     });
@@ -443,7 +444,7 @@ describe('Config', function() {
 
       it('sets the skip option of the ALL section to true', function() {
         this.config.applyEnvironment(this.hookContext, this.env);
-        var hookConfig = this.config.forHook('ALL', 'PreCommit');
+        let hookConfig = this.config.forHook('ALL', 'PreCommit');
         expect(hookConfig).to.have.property('skip', true);
       });
     });
@@ -456,13 +457,13 @@ describe('Config', function() {
 
       it('sets the skip option of the ALL section to true', function() {
         this.config.applyEnvironment(this.hookContext, this.env);
-        var hookConfig = this.config.forHook('ALL', 'PreCommit');
+        let hookConfig = this.config.forHook('ALL', 'PreCommit');
         expect(hookConfig).to.have.property('skip', true);
       });
 
       it('sets the skip option of the filtered hook to false', function() {
         this.config.applyEnvironment(this.hookContext, this.env);
-        var hookConfig = this.config.forHook('AuthorName', 'PreCommit');
+        let hookConfig = this.config.forHook('AuthorName', 'PreCommit');
         expect(hookConfig).to.have.property('skip', false);
       });
     });

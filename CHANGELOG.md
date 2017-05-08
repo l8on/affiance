@@ -1,5 +1,11 @@
 # Affiance Changelog
 
+## 1.3.0
+### New Features
+* A top level `nodeModuleMode` setting has been added.
+  This can be set to `global` if you want to use global
+  modules for affiance hooks.
+
 ## 1.2.0
 ### New Features
 * Affiance has gone all in on es6

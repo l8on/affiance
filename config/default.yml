@@ -26,6 +26,16 @@ quiet: false
 # See https://github.com/l8on/affiance#security for more information.
 verifySignatures: true
 
+
+# This configuration changes the default location node modules are
+# expected to be found. To enumerate the possible values and what they mean:
+# * "local" - means all node modules will be installed locally and `npm bin`
+#     will be used to find the binary directory.
+# * "global" - means all node modules will be install globally and the binaries
+#     are expected to be available in the $PATH of the current user.
+# Defaults to "local"
+nodeModuleMode: 'local'
+
 # Hooks that are run against every commit message after a user has written it.
 # These hooks are useful for enforcing policies on commit messages written for a
 # project.
@@ -58,16 +68,20 @@ PreCommit:
     enabled: false
     description: 'Analyze with coffeelint'
     requiredExecutable: './node_modules/.bin/coffeelint'
+    globalRequiredExecutable: 'coffeelint'
     flags: ['--reporter=csv']
     installCommand: 'npm install coffeelint'
+    globalInstallCommand: 'npm install -g coffeelint'
     include: '**/*.coffee'
 
   EsLint:
     enabled: false
     description: 'Analyze with ESLint'
     requiredExecutable: './node_modules/.bin/eslint'
+    globalRequiredExecutable: 'eslint'
     flags: ['--format=compact']
     installCommand: 'npm install eslint'
+    globalInstallCommand: 'npm install -g eslint'
     include: '**/*.js'
     exclude: '*.yml'
 
@@ -91,9 +105,11 @@ PreCommit:
     description: "Analyze with stylus linter"
     quiet: false
     requiredExecutable: './node_modules/.bin/stylint'
+    globalRequiredExecutable: 'stylint'
     requiredLibrary: 'stylint-json-reporter'
     flags: ['--reporter', 'stylint-json-reporter']
-    installCommand: 'npm install stylint && npm install stylint-json-reporter'
+    installCommand: 'npm install stylint stylint-json-reporter'
+    globalInstallCommand: 'npm install -g stylint stylint-json-reporter'
     include: '**/*.styl'
 
 # Hooks that run after HEAD changes or a file is explicitly checked out.

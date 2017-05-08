@@ -1,13 +1,13 @@
-var path = require('path');
-var fse = require('fs-extra');
-var testHelper = require('../../../test_helper');
-var expect = testHelper.expect;
-var sinon = testHelper.sinon;
-var HookContextPreCommit = testHelper.requireSourceModule(module);
-var Config = testHelper.requireSourceModule(module, 'lib/config');
-var gitRepo = testHelper.requireSourceModule(module, 'lib/gitRepo');
-var utils = testHelper.requireSourceModule(module, 'lib/utils');
-var fileUtils = testHelper.requireSourceModule(module, 'lib/fileUtils');
+'use strict';
+const path = require('path');
+const fse = require('fs-extra');
+const testHelper = require('../../../test_helper');
+const expect = testHelper.expect;
+const sinon = testHelper.sinon;
+const HookContextPreCommit = testHelper.requireSourceModule(module);
+const Config = testHelper.requireSourceModule(module, 'lib/config');
+const utils = testHelper.requireSourceModule(module, 'lib/utils');
+const fileUtils = testHelper.requireSourceModule(module, 'lib/fileUtils');
 
 describe('HookContextPreCommit', function () {
   beforeEach('setup hook context', function () {
@@ -126,13 +126,13 @@ describe('HookContextPreCommit', function () {
       });
 
       it('keeps moodification times the same', function(done) {
-        var modifiedTimes = {
+        let modifiedTimes = {
           'tracked-file': fileUtils.modifiedTime(this.paths['tracked-file']),
           'other-tracked-file': fileUtils.modifiedTime(this.paths['other-tracked-file']),
           'untracked-file': fileUtils.modifiedTime(this.paths['untracked-file'])
         };
 
-        var self = this;
+        let self = this;
         setTimeout(function() {
           self.context.setupEnvironment();
 
@@ -180,15 +180,15 @@ describe('HookContextPreCommit', function () {
       });
 
       it('keeps moodification times the same', function(done) {
-        var paths = this.paths;
+        let paths = this.paths;
 
-        var modifiedTimes = {
+        let modifiedTimes = {
           'tracked-file': fileUtils.modifiedTime(paths['tracked-file']),
           'other-tracked-file': fileUtils.modifiedTime(paths['other-tracked-file']),
           'untracked-file': fileUtils.modifiedTime(paths['untracked-file'])
         };
 
-        var self = this;
+        let self = this;
         setTimeout(function() {
           self.context.setupEnvironment();
           expect(fileUtils.modifiedTime(paths['tracked-file'])).to.equal(modifiedTimes['tracked-file']);
@@ -220,7 +220,7 @@ describe('HookContextPreCommit', function () {
 
     describe('when only a submodule change is staged', function() {
       beforeEach('setup submodule repo', function() {
-        var submoduleRepo = testHelper.tempRepo();
+        let submoduleRepo = testHelper.tempRepo();
         utils.execSync('git commit --allow-empty -m "Initial commit"', {cwd: submoduleRepo});
 
         utils.execSync('git submodule add ' + submoduleRepo + ' sub 2>&1 > /dev/null');
@@ -236,12 +236,12 @@ describe('HookContextPreCommit', function () {
       });
 
       it('keeps staged submodule change', function() {
-        var diffBefore = utils.execSync('git diff --cached');
+        let diffBefore = utils.execSync('git diff --cached');
         expect(diffBefore).to.match(/-Subproject commit[\s\S]*\+Subproject commit/);
 
         this.context.setupEnvironment();
 
-        var diffAfter = utils.execSync('git diff --cached');
+        let diffAfter = utils.execSync('git diff --cached');
         expect(diffAfter).to.match(/-Subproject commit[\s\S]*\+Subproject commit/);
         expect(diffBefore).to.equal(diffAfter);
       });
@@ -290,13 +290,13 @@ describe('HookContextPreCommit', function () {
       });
 
       it('keeps moodification times the same', function(done) {
-        var modifiedTimes = {
+        let modifiedTimes = {
           'tracked-file': fileUtils.modifiedTime(this.paths['tracked-file']),
           'other-tracked-file': fileUtils.modifiedTime(this.paths['other-tracked-file']),
           'untracked-file': fileUtils.modifiedTime(this.paths['untracked-file'])
         };
 
-        var self = this;
+        let self = this;
         setTimeout(function () {
           self.context.cleanupEnvironment();
 
@@ -335,7 +335,7 @@ describe('HookContextPreCommit', function () {
       it('keeps staged changes', function() {
         this.context.cleanupEnvironment();
 
-        var showOutput = utils.execSync('git show :tracked-file');
+        let showOutput = utils.execSync('git show :tracked-file');
         expect(showOutput).to.equal('Hello World\nSome more text');
       });
 
@@ -346,15 +346,15 @@ describe('HookContextPreCommit', function () {
       });
 
       it('keeps moodification times the same', function(done) {
-        var paths = this.paths;
+        let paths = this.paths;
 
-        var modifiedTimes = {
+        let modifiedTimes = {
           'tracked-file': fileUtils.modifiedTime(paths['tracked-file']),
           'other-tracked-file': fileUtils.modifiedTime(paths['other-tracked-file']),
           'untracked-file': fileUtils.modifiedTime(paths['untracked-file'])
         };
 
-        var self = this;
+        let self = this;
         setTimeout(function() {
           self.context.cleanupEnvironment();
           expect(fileUtils.modifiedTime(paths['tracked-file'])).to.equal(modifiedTimes['tracked-file']);
@@ -384,7 +384,7 @@ describe('HookContextPreCommit', function () {
 
     describe('when only a submodule change was staged', function() {
       beforeEach('setup submodule repo', function() {
-        var submoduleRepo = testHelper.tempRepo();
+        let submoduleRepo = testHelper.tempRepo();
         utils.execSync('git commit --allow-empty -m "Initial commit"', {cwd: submoduleRepo});
 
         utils.execSync('git submodule add ' + submoduleRepo + ' sub 2>&1 > /dev/null');
@@ -402,12 +402,12 @@ describe('HookContextPreCommit', function () {
       });
 
       it('keeps staged submodule change', function() {
-        var diffBefore = utils.execSync('git diff --cached');
+        let diffBefore = utils.execSync('git diff --cached');
         expect(diffBefore).to.match(/-Subproject commit[\s\S]*\+Subproject commit/);
 
         this.context.cleanupEnvironment();
 
-        var diffAfter = utils.execSync('git diff --cached');
+        let diffAfter = utils.execSync('git diff --cached');
         expect(diffAfter).to.match(/-Subproject commit[\s\S]*\+Subproject commit/);
         expect(diffBefore).to.equal(diffAfter);
       });
@@ -415,7 +415,7 @@ describe('HookContextPreCommit', function () {
 
     describe('when submodule changes are staged along with other changes', function() {
       beforeEach('setup submodule repo', function() {
-        var submoduleRepo = testHelper.tempRepo();
+        let submoduleRepo = testHelper.tempRepo();
         utils.execSync('git commit --allow-empty -m "Initial commit"', {cwd: submoduleRepo});
 
         utils.execSync('git submodule add ' + submoduleRepo + ' sub 2>&1 > /dev/null');
@@ -434,25 +434,25 @@ describe('HookContextPreCommit', function () {
       });
 
       it('keeps staged submodule change', function() {
-        var diffBefore = utils.execSync('git diff --cached');
+        let diffBefore = utils.execSync('git diff --cached');
         expect(diffBefore).to.match(/-Subproject commit[\s\S]*\+Subproject commit/);
 
         this.context.cleanupEnvironment();
 
-        var diffAfter = utils.execSync('git diff --cached');
+        let diffAfter = utils.execSync('git diff --cached');
         expect(diffAfter).to.match(/-Subproject commit[\s\S]*\+Subproject commit/);
         expect(diffBefore).to.equal(diffAfter);
       });
 
       it('keeps staged file changes', function() {
-        var showOutput = utils.execSync('git show :tracked-file');
+        let showOutput = utils.execSync('git show :tracked-file');
         expect(showOutput).to.equal('Hello Again');
       });
     });
 
     describe('when a submodule removal was staged', function() {
       beforeEach('setup submodule repo', function() {
-        var submoduleRepo = testHelper.tempRepo();
+        let submoduleRepo = testHelper.tempRepo();
         utils.execSync('git commit --allow-empty -m "Initial commit"', {cwd: submoduleRepo});
 
         utils.execSync('git submodule add ' + submoduleRepo + ' sub 2>&1 > /dev/null');
@@ -477,18 +477,18 @@ describe('HookContextPreCommit', function () {
     });
 
     it('is empty if no files are staged', function() {
-      expect(this.context.modifiedFiles()).to.be.empty
+      expect(this.context.modifiedFiles()).to.be.empty;
     });
 
     it('does not include submodules', function() {
-      var submoduleRepo = testHelper.tempRepo();
+      let submoduleRepo = testHelper.tempRepo();
       fse.ensureFileSync(path.join(submoduleRepo, 'foo'));
       utils.execSync('git add foo', {cwd: submoduleRepo});
       utils.execSync('git commit -m "Initial commit"', {cwd: submoduleRepo});
 
       utils.execSync('git submodule add ' + submoduleRepo + ' test-sub 2>&1 > /dev/null');
 
-      var modifiedFiles = this.context.modifiedFiles();
+      let modifiedFiles = this.context.modifiedFiles();
       expect(modifiedFiles).to.have.length(1);
       expect(modifiedFiles[0]).to.not.include('test-sub');
     });
@@ -497,13 +497,13 @@ describe('HookContextPreCommit', function () {
       fse.ensureFileSync(path.join(this.repoPath, 'some-file'));
       utils.execSync('git add some-file');
 
-      var modifiedFiles = this.context.modifiedFiles();
+      let modifiedFiles = this.context.modifiedFiles();
       expect(modifiedFiles).to.have.length(1);
       expect(modifiedFiles[0]).to.include('some-file');
     });
 
     it('includes modified files', function() {
-      var filePath = path.join(this.repoPath, 'some-file');
+      let filePath = path.join(this.repoPath, 'some-file');
       fse.ensureFileSync(filePath);
       utils.execSync('git add some-file');
       utils.execSync('git commit -m "Initial commit"');
@@ -511,21 +511,21 @@ describe('HookContextPreCommit', function () {
       fse.writeFileSync(filePath, 'Hello');
       utils.execSync('git add some-file');
 
-      var modifiedFiles = this.context.modifiedFiles();
+      let modifiedFiles = this.context.modifiedFiles();
       expect(modifiedFiles).to.have.length(1);
       expect(modifiedFiles[0]).to.include('some-file');
     });
 
     it('does not include deleted files', function() {
-      var filePath = path.join(this.repoPath, 'some-file');
+      let filePath = path.join(this.repoPath, 'some-file');
       fse.ensureFileSync(filePath);
       utils.execSync('git add some-file');
       utils.execSync('git commit -m "Initial commit"');
 
       utils.execSync('git rm some-file');
 
-      var modifiedFiles = this.context.modifiedFiles();
-      expect(modifiedFiles).to.be.empty
+      let modifiedFiles = this.context.modifiedFiles();
+      expect(modifiedFiles).to.be.empty;
     });
 
     describe('when amending the last commit', function() {
@@ -543,7 +543,7 @@ describe('HookContextPreCommit', function () {
       });
 
       it('includes initial commit and staged files', function() {
-        var modifiedFiles = this.context.modifiedFiles();
+        let modifiedFiles = this.context.modifiedFiles();
         modifiedFiles.sort();
         expect(modifiedFiles).to.have.length(2);
         expect(modifiedFiles[0]).to.include('other-file');
@@ -565,7 +565,7 @@ describe('HookContextPreCommit', function () {
       });
 
       it('does not include the old file name in the list of modified files', function() {
-        var modifiedFiles = this.context.modifiedFiles();
+        let modifiedFiles = this.context.modifiedFiles();
         modifiedFiles.sort();
         expect(modifiedFiles).to.have.length(1);
         expect(modifiedFiles[0]).to.include('renamed-file');
@@ -584,7 +584,7 @@ describe('HookContextPreCommit', function () {
       fse.writeFileSync(this.filePath, '1\n2\n3\n');
       utils.execSync('git add some-file');
 
-      var modifiedLines = this.context.modifiedLinesInFile('some-file');
+      let modifiedLines = this.context.modifiedLinesInFile('some-file');
       expect(modifiedLines).to.deep.equal(['1', '2', '3'])
     });
 
@@ -592,7 +592,7 @@ describe('HookContextPreCommit', function () {
       fse.writeFileSync(this.filePath, '1\n2\n3');
       utils.execSync('git add some-file');
 
-      var modifiedLines = this.context.modifiedLinesInFile('some-file');
+      let modifiedLines = this.context.modifiedLinesInFile('some-file');
       expect(modifiedLines).to.deep.equal(['1', '2', '3'])
     });
 
@@ -609,7 +609,7 @@ describe('HookContextPreCommit', function () {
       });
 
       it('returns original and amended lines', function() {
-        var modifiedLines = this.context.modifiedLinesInFile('some-file');
+        let modifiedLines = this.context.modifiedLinesInFile('some-file');
         expect(modifiedLines).to.deep.equal(['1', '2', '3', '4'])
       });
     });

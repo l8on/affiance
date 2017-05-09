@@ -1,5 +1,12 @@
 # Affiance Changelog
 
+## 1.3.2
+* Fail coffeelint if the process never starts
+
+## 1.3.1
+### Bugs Fixed
+* Stop configurations from bleeding across hooks
+
 ## 1.3.0
 ### New Features
 * A top level `nodeModuleMode` setting has been added.

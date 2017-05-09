@@ -20,6 +20,8 @@ writing any Javascript code.
   * [Hook Options](#hook-options)
   * [Hook Categories](#hook-categories)
   * [Plugin Directory](#plugin-directory)
+  * [Concurrency](#concurrency)
+  * [Node Module Mode](#node-module-mode)
   * [Signature Verification](#signature-verification)
 * [Built-In Hooks](#built-in-hooks)
   * [CommitMsg](#commitmsg)
@@ -298,6 +300,26 @@ concurrency: '%{processors} / 4'
 Note that individual hooks can specify the number of processors they require
 with the `processors` hook option. See the [hook options](#hook-options)
 section for more details.
+
+### Node Module Mode
+
+Affiance assumes that all node modules hooks depend on will be installed 
+locally. So by default, binaries are invoked using the binary directory
+of locally installed modules (usually `./node_modules/.bin`).
+However, if you would like to use the global version of dependent modules
+for all node bases linters, you can set the `nodeModuleMode` to `global`. 
+When in global mode, affiance will not attempt to verify `requiredLibraries` 
+and will assume the necessary binaries are in the `PATH` and will be invoked
+using the normal binary name.
+
+```yaml
+nodeModuleMode: 'global'
+```
+
+Note, when in `global` mode, affiance will use the `globalRequiredExecutable`
+configuration to run the hook and the `globalInstallCommand` to output
+install instructions. You can always specify a specific behavior for a hook
+by specifying a `command` option or overriding the configurations above.
 
 ### Signature Verification
 

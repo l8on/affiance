@@ -8,7 +8,7 @@
 # `include`), whether to only display output if it fails (via `quiet`), etc.
 #
 # For a complete list of hooks, see:
-# https://github.com/brigade/affiance/tree/master/lib/hook
+# https://github.com/l8on/affiance/tree/master/lib/hook
 #
 # For a complete list of options that you can use to customize hooks, see:
 # https://github.com/l8on/affiance#configuration

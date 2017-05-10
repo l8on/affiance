@@ -1,5 +1,8 @@
 # Affiance Changelog
 
+## 1.3.3
+* Fix link in starter config file
+
 ## 1.3.2
 * Fail coffeelint if the process never starts
 

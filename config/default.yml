@@ -26,7 +26,6 @@ quiet: false
 # See https://github.com/l8on/affiance#security for more information.
 verifySignatures: true
 
-
 # This configuration changes the default location node modules are
 # expected to be found. To enumerate the possible values and what they mean:
 # * "local" - means all node modules will be installed locally and `npm bin`

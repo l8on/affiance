@@ -1,20 +1,21 @@
-var testHelper = require('../../../test_helper');
-var expect = testHelper.expect;
-var sinon = testHelper.sinon;
-var MessageProcessor = testHelper.requireSourceModule(module);
+'use strict';
+const testHelper = require('../../../test_helper');
+const expect = testHelper.expect;
+const sinon = testHelper.sinon;
+const MessageProcessor = testHelper.requireSourceModule(module);
 
-var Config = testHelper.requireSourceModule(module, 'lib/config');
-var HookBase = testHelper.requireSourceModule(module, 'lib/hook/Base');
-var HookMessage = testHelper.requireSourceModule(module, 'lib/hook/Message');
-var HookContextBase = testHelper.requireSourceModule(module, 'lib/hook-context/base');
+const Config = testHelper.requireSourceModule(module, 'lib/config');
+const HookBase = testHelper.requireSourceModule(module, 'lib/hook/Base');
+const HookMessage = testHelper.requireSourceModule(module, 'lib/hook/Message');
+const HookContextBase = testHelper.requireSourceModule(module, 'lib/hook-context/base');
 
 // Shorthand to make writing these easier
-var EMH = MessageProcessor.ERRORS_MODIFIED_HEADER + "\n";
-var WMH = MessageProcessor.WARNINGS_MODIFIED_HEADER + "\n";
-var EUH = MessageProcessor.ERRORS_UNMODIFIED_HEADER + "\n";
-var WUH = MessageProcessor.WARNINGS_UNMODIFIED_HEADER + "\n";
-var EGH = MessageProcessor.ERRORS_GENERIC_HEADER + "\n";
-var WGH = MessageProcessor.WARNINGS_GENERIC_HEADER + "\n";
+const EMH = MessageProcessor.ERRORS_MODIFIED_HEADER + '\n';
+const WMH = MessageProcessor.WARNINGS_MODIFIED_HEADER + '\n';
+const EUH = MessageProcessor.ERRORS_UNMODIFIED_HEADER + '\n';
+const WUH = MessageProcessor.WARNINGS_UNMODIFIED_HEADER + '\n';
+const EGH = MessageProcessor.ERRORS_GENERIC_HEADER + '\n';
+const WGH = MessageProcessor.WARNINGS_GENERIC_HEADER + '\n';
 
 function errorMess(fileName, lineNumber) {
   return new HookMessage('error', fileName, lineNumber, 'Error!');
@@ -46,21 +47,21 @@ describe('MessageProcessor', function () {
     describe('when there are no messages', function() {
       it('returns a pass when unmodifiedLinesSetting is report', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'report';
-        var hookResult = this.messageProcessor.hookResult([]);
+        let hookResult = this.messageProcessor.hookResult([]);
         expect(hookResult).to.have.property('status', 'pass');
         expect(hookResult).to.have.property('output', '');
       });
 
       it('returns a pass when unmodifiedLinesSetting is warn', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'warn';
-        var hookResult = this.messageProcessor.hookResult([]);
+        let hookResult = this.messageProcessor.hookResult([]);
         expect(hookResult).to.have.property('status', 'pass');
         expect(hookResult).to.have.property('output', '');
       });
 
       it('returns a pass when unmodifiedLinesSetting is ignore', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'ignore';
-        var hookResult = this.messageProcessor.hookResult([]);
+        let hookResult = this.messageProcessor.hookResult([]);
         expect(hookResult).to.have.property('status', 'pass');
         expect(hookResult).to.have.property('output', '');
       });
@@ -75,21 +76,21 @@ describe('MessageProcessor', function () {
 
       it('returns an error when unmodifiedLinesSetting is report', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'report';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'fail');
         expect(hookResult).to.have.property('output', EMH + 'Error!\n');
       });
 
       it('returns an error when unmodifiedLinesSetting is warn', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'warn';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'fail');
         expect(hookResult).to.have.property('output', EMH + 'Error!\n');
       });
 
       it('returns an error when unmodifiedLinesSetting is ignore', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'ignore';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'fail');
         expect(hookResult).to.have.property('output', EMH + 'Error!\n');
       });
@@ -104,21 +105,21 @@ describe('MessageProcessor', function () {
 
       it('returns an error when unmodifiedLinesSetting is report', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'report';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'fail');
-        expect(hookResult).to.have.property('output', EUH + "Error!\n");
+        expect(hookResult).to.have.property('output', EUH + 'Error!\n');
       });
 
       it('returns an error when unmodifiedLinesSetting is warn', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'warn';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'warn');
-        expect(hookResult).to.have.property('output', EUH + "Error!\n");
+        expect(hookResult).to.have.property('output', EUH + 'Error!\n');
       });
 
       it('returns an error when unmodifiedLinesSetting is ignore', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'ignore';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'pass');
         expect(hookResult).to.have.property('output', '');
       });
@@ -133,21 +134,21 @@ describe('MessageProcessor', function () {
 
       it('returns an error when unmodifiedLinesSetting is report', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'report';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'warn');
         expect(hookResult).to.have.property('output', WMH + 'Warning!\n');
       });
 
       it('returns an error when unmodifiedLinesSetting is warn', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'warn';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'warn');
         expect(hookResult).to.have.property('output', WMH + 'Warning!\n');
       });
 
       it('returns an error when unmodifiedLinesSetting is ignore', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'ignore';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'warn');
         expect(hookResult).to.have.property('output', WMH + 'Warning!\n');
       });
@@ -162,21 +163,21 @@ describe('MessageProcessor', function () {
 
       it('returns an error when unmodifiedLinesSetting is report', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'report';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'warn');
-        expect(hookResult).to.have.property('output', WUH + "Warning!\n");
+        expect(hookResult).to.have.property('output', WUH + 'Warning!\n');
       });
 
       it('returns an error when unmodifiedLinesSetting is warn', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'warn';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'warn');
-        expect(hookResult).to.have.property('output', WUH + "Warning!\n");
+        expect(hookResult).to.have.property('output', WUH + 'Warning!\n');
       });
 
-      it('returns an error when unmodifiedLinesSetting is ignore', function() {
+      it('passes when unmodifiedLinesSetting is ignore', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'ignore';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'pass');
         expect(hookResult).to.have.property('output', '');
       });
@@ -192,21 +193,21 @@ describe('MessageProcessor', function () {
 
       it('returns an error when unmodifiedLinesSetting is report', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'report';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'fail');
         expect(hookResult).to.have.property('output', EMH + 'Error!\n' + WMH + 'Warning!\n');
       });
 
       it('returns an error when unmodifiedLinesSetting is warn', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'warn';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'fail');
         expect(hookResult).to.have.property('output', EMH + 'Error!\n' + WMH + 'Warning!\n');
       });
 
       it('returns an error when unmodifiedLinesSetting is ignore', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'ignore';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'fail');
         expect(hookResult).to.have.property('output', EMH + 'Error!\n' + WMH + 'Warning!\n');
       });
@@ -222,21 +223,21 @@ describe('MessageProcessor', function () {
 
       it('returns an error when unmodifiedLinesSetting is report', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'report';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'fail');
         expect(hookResult).to.have.property('output', EUH + 'Error!\n' + WUH + 'Warning!\n');
       });
 
       it('returns an error when unmodifiedLinesSetting is warn', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'warn';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'warn');
         expect(hookResult).to.have.property('output', EUH + 'Error!\n' + WUH + 'Warning!\n');
       });
 
       it('returns an error when unmodifiedLinesSetting is ignore', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'ignore';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'pass');
         expect(hookResult).to.have.property('output', '');
       });
@@ -257,7 +258,7 @@ describe('MessageProcessor', function () {
 
       it('returns an error when unmodifiedLinesSetting is report', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'report';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'fail');
         expect(hookResult).to.have.property(
           'output',
@@ -268,7 +269,7 @@ describe('MessageProcessor', function () {
 
       it('returns an error when unmodifiedLinesSetting is warn', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'warn';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'fail');
         expect(hookResult).to.have.property(
           'output',
@@ -278,7 +279,7 @@ describe('MessageProcessor', function () {
 
       it('returns an error when unmodifiedLinesSetting is ignore', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'ignore';
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'fail');
         expect(hookResult).to.have.property('output', EMH + 'Error!\n' + WMH + 'Warning!\n');
       });
@@ -291,7 +292,7 @@ describe('MessageProcessor', function () {
       });
 
       it('returns the errors', function() {
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'fail');
         expect(hookResult).to.have.property('output', 'Error!\nError!\n');
       });
@@ -304,7 +305,7 @@ describe('MessageProcessor', function () {
       });
 
       it('returns the warnings', function() {
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'warn');
         expect(hookResult).to.have.property('output', 'Warning!\nWarning!\n');
       });
@@ -317,7 +318,7 @@ describe('MessageProcessor', function () {
       });
 
       it('returns the warnings', function() {
-        var hookResult = this.messageProcessor.hookResult(this.messages);
+        let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'fail');
         expect(hookResult).to.have.property('output', 'Warning!\nError!\nWarning!\nError!\n');
       });
@@ -342,7 +343,7 @@ describe('MessageProcessor', function () {
         });
 
         it('returns combined failure output', function() {
-          var hookResult = this.messageProcessor.hookResult(this.messages);
+          let hookResult = this.messageProcessor.hookResult(this.messages);
           expect(hookResult).to.have.property('status', 'fail');
           expect(hookResult).to.have.property(
             'output',
@@ -359,7 +360,7 @@ describe('MessageProcessor', function () {
         });
 
         it('returns combined failure output', function() {
-          var hookResult = this.messageProcessor.hookResult(this.messages);
+          let hookResult = this.messageProcessor.hookResult(this.messages);
           expect(hookResult).to.have.property('status', 'fail');
           expect(hookResult).to.have.property(
             'output',
@@ -376,7 +377,7 @@ describe('MessageProcessor', function () {
         });
 
         it('returns combined failure output', function() {
-          var hookResult = this.messageProcessor.hookResult(this.messages);
+          let hookResult = this.messageProcessor.hookResult(this.messages);
           expect(hookResult).to.have.property('status', 'fail');
           expect(hookResult).to.have.property(
             'output',
@@ -394,7 +395,7 @@ describe('MessageProcessor', function () {
         });
 
         it('returns combined failure output', function() {
-          var hookResult = this.messageProcessor.hookResult(this.messages);
+          let hookResult = this.messageProcessor.hookResult(this.messages);
           expect(hookResult).to.have.property('status', 'fail');
           expect(hookResult).to.have.property(
             'output',
@@ -411,7 +412,7 @@ describe('MessageProcessor', function () {
         });
 
         it('returns combined failure output', function() {
-          var hookResult = this.messageProcessor.hookResult(this.messages);
+          let hookResult = this.messageProcessor.hookResult(this.messages);
           expect(hookResult).to.have.property('status', 'fail');
           expect(hookResult).to.have.property(
             'output',

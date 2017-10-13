@@ -84,6 +84,16 @@ PreCommit:
     include: '**/*.js'
     exclude: '*.yml'
 
+  NspCheck:
+    enabled: false
+    description: 'Check for module vulnerabilities with nsp'
+    quiet: false
+    requiredExecutable: 'nsp'
+    globalRequiredExecutable: 'nsp'
+    flags: ['check']
+    installCommand: 'npm install -g nsp'
+    globalInstallCommand: 'npm install -g nsp'
+
   MergeConflicts:
     enabled: true
     description: 'Check for merge conflicts'
@@ -135,6 +145,16 @@ PostCheckout:
     requiredExecutable: 'npm'
     flags: ['outdated']
 
+  NspCheck:
+    enabled: false
+    description: 'Check for module vulnerabilities with nsp'
+    quiet: false
+    requiredExecutable: 'nsp'
+    globalRequiredExecutable: 'nsp'
+    flags: ['check']
+    installCommand: 'npm install -g nsp'
+    globalInstallCommand: 'npm install -g nsp'
+
 
 # Hooks that run after a commit is created.
 PostCommit:
@@ -160,6 +180,16 @@ PostCommit:
     requiredExecutable: 'npm'
     flags: ['outdated']
 
+  NspCheck:
+    enabled: false
+    description: 'Check for module vulnerabilities with nsp'
+    quiet: false
+    requiredExecutable: 'nsp'
+    globalRequiredExecutable: 'nsp'
+    flags: ['check']
+    installCommand: 'npm install -g nsp'
+    globalInstallCommand: 'npm install -g nsp'
+
 # Hooks that run after `git merge` executes successfully (no merge conflicts).
 PostMerge:
   ALL:
@@ -182,6 +212,16 @@ PostMerge:
     requiresFiles: false
     requiredExecutable: 'npm'
     flags: ['outdated']
+
+  NspCheck:
+    enabled: false
+    description: 'Check for module vulnerabilities with nsp'
+    quiet: false
+    requiredExecutable: 'nsp'
+    globalRequiredExecutable: 'nsp'
+    flags: ['check']
+    installCommand: 'npm install -g nsp'
+    globalInstallCommand: 'npm install -g nsp'
 
 # Hooks that run after a commit is modified by an amend or rebase.
 PostRewrite:
@@ -206,6 +246,16 @@ PostRewrite:
     requiredExecutable: 'npm'
     flags: ['outdated']
 
+  NspCheck:
+    enabled: false
+    description: 'Check for module vulnerabilities with nsp'
+    quiet: false
+    requiredExecutable: 'nsp'
+    globalRequiredExecutable: 'nsp'
+    flags: ['check']
+    installCommand: 'npm install -g nsp'
+    globalInstallCommand: 'npm install -g nsp'
+
 # Hooks that run during `git push`, after remote refs have been updated but
 # before any objects have been transferred.
 PrePush:
@@ -214,16 +264,26 @@ PrePush:
     required: false
     quiet: false
 
-  ProtectedBranches:
+  NspCheck:
     enabled: false
-    description: 'Check for illegal pushes to protected branches'
-    destructiveOnly: true
-    branches: ['master']
+    description: 'Check for module vulnerabilities with nsp'
+    quiet: false
+    requiredExecutable: 'nsp'
+    globalRequiredExecutable: 'nsp'
+    flags: ['check']
+    installCommand: 'npm install -g nsp'
+    globalInstallCommand: 'npm install -g nsp'
 
   Mocha:
     enabled: false
     description: 'Run Mocha test suite'
     requiredExecutable: './node_modules/.bin/mocha'
+
+  ProtectedBranches:
+    enabled: false
+    description: 'Check for illegal pushes to protected branches'
+    destructiveOnly: true
+    branches: ['master']
 
 # Hooks that run during `git rebase`, before any commits are rebased.
 # If a hook fails, the rebase is aborted.

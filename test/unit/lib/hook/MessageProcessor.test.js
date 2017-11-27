@@ -94,6 +94,36 @@ describe('MessageProcessor', function () {
         expect(hookResult).to.have.property('status', 'fail');
         expect(hookResult).to.have.property('output', EMH + 'Error!\n');
       });
+
+      it('passes if the ignoreMessagePattern filters out all messages', function() {
+        this.messageProcessor.ignoreMessagePattern = RegExp('Error!');
+        let hookResult = this.messageProcessor.hookResult(this.messages);
+        expect(hookResult).to.have.property('status', 'pass');
+      });
+    });
+
+    describe('when there are different errors on modified lines', function() {
+      beforeEach('setup messages', function () {
+        this.messages = [
+          new HookMessage('error', 'node.js', 2, 'Error 1!'),
+          new HookMessage('error', 'node.js', 3, 'Error 2!'),
+        ];
+        this.context.modifiedLinesInFile = this.sandbox.stub();
+        this.context.modifiedLinesInFile.withArgs('node.js').returns(['2', '3']);
+      });
+
+      it('returns an error if ignoreMessagePattern matches a subset of the errors', function() {
+        this.messageProcessor.ignoreMessagePattern = RegExp('Error 1!');
+        let hookResult = this.messageProcessor.hookResult(this.messages);
+        expect(hookResult).to.have.property('status', 'fail');
+        expect(hookResult).to.have.property('output', EMH + 'Error 2!\n');
+      });
+
+      it('passes if ignoreMessagePattern matches all of the errors', function() {
+        this.messageProcessor.ignoreMessagePattern = RegExp('Error.*!');
+        let hookResult = this.messageProcessor.hookResult(this.messages);
+        expect(hookResult).to.have.property('status', 'pass');
+      });
     });
 
     describe('when there is an error on unmodified lines', function() {
@@ -117,7 +147,7 @@ describe('MessageProcessor', function () {
         expect(hookResult).to.have.property('output', EUH + 'Error!\n');
       });
 
-      it('returns an error when unmodifiedLinesSetting is ignore', function() {
+      it('passes when unmodifiedLinesSetting is ignore', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'ignore';
         let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'pass');
@@ -146,11 +176,17 @@ describe('MessageProcessor', function () {
         expect(hookResult).to.have.property('output', WMH + 'Warning!\n');
       });
 
-      it('returns an error when unmodifiedLinesSetting is ignore', function() {
+      it('returns a warning when unmodifiedLinesSetting is ignore', function() {
         this.messageProcessor.unmodifiedLinesSetting = 'ignore';
         let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'warn');
         expect(hookResult).to.have.property('output', WMH + 'Warning!\n');
+      });
+
+      it('passes if the ignoreMessagePattern filters out all warnings', function() {
+        this.messageProcessor.ignoreMessagePattern = RegExp('Warning!');
+        let hookResult = this.messageProcessor.hookResult(this.messages);
+        expect(hookResult).to.have.property('status', 'pass');
       });
     });
 
@@ -211,6 +247,18 @@ describe('MessageProcessor', function () {
         expect(hookResult).to.have.property('status', 'fail');
         expect(hookResult).to.have.property('output', EMH + 'Error!\n' + WMH + 'Warning!\n');
       });
+
+      it('warns if the ignoreMessagePattern filters out all errors', function() {
+        this.messageProcessor.ignoreMessagePattern = RegExp('Error!');
+        let hookResult = this.messageProcessor.hookResult(this.messages);
+        expect(hookResult).to.have.property('status', 'warn');
+      });
+
+      it('passes if the ignoreMessagePattern filters out all errors and warnings', function() {
+        this.messageProcessor.ignoreMessagePattern = RegExp('(Error|Warning)');
+        let hookResult = this.messageProcessor.hookResult(this.messages);
+        expect(hookResult).to.have.property('status', 'pass');
+      });
     });
 
     describe('when there are errors and warnings on unmodified lines', function() {
@@ -241,6 +289,21 @@ describe('MessageProcessor', function () {
         expect(hookResult).to.have.property('status', 'pass');
         expect(hookResult).to.have.property('output', '');
       });
+
+      it('warns if the ignoreMessagePattern filters out all errors and unmodifiedLinesSetting is report', function() {
+        this.messageProcessor.unmodifiedLinesSetting = 'report';
+        this.messageProcessor.ignoreMessagePattern = RegExp('Error!');
+        let hookResult = this.messageProcessor.hookResult(this.messages);
+        expect(hookResult).to.have.property('status', 'warn');
+      });
+
+      it('passes if the ignoreMessagePattern filters out all errors and warnings and unmodifiedLinesSetting is report', function() {
+        this.messageProcessor.unmodifiedLinesSetting = 'report';
+        this.messageProcessor.ignoreMessagePattern = RegExp('(Error|Warning)');
+        let hookResult = this.messageProcessor.hookResult(this.messages);
+        expect(hookResult).to.have.property('status', 'pass');
+      });
+
     });
 
     describe('when there are errors and warnings on unmodified/modified lines', function() {
@@ -295,6 +358,12 @@ describe('MessageProcessor', function () {
         let hookResult = this.messageProcessor.hookResult(this.messages);
         expect(hookResult).to.have.property('status', 'fail');
         expect(hookResult).to.have.property('output', 'Error!\nError!\n');
+      });
+
+      it('passes if the ignoreMessagePattern filters out all errors', function() {
+        this.messageProcessor.ignoreMessagePattern = RegExp('Error!');
+        let hookResult = this.messageProcessor.hookResult(this.messages);
+        expect(hookResult).to.have.property('status', 'pass');
       });
     });
 

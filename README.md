@@ -426,7 +426,7 @@ Out of the box, `affiance` comes with a set of hooks that enforce a variety of
 styles and lints. However, some hooks only make sense in the context of a
 specific repository.
 
-At Brigade, for example, we have a number of simple checks that we run
+At Lever, for example, we have a number of simple checks that we run
 against our code to catch common errors. For example, since we use coffeescript
 in development, we want to make sure all requires do not specify the file
 extension of `.coffee` because those won't work when the code is compiled to

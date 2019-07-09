@@ -1,5 +1,24 @@
 # Affiance Changelog
 
+## 1.6.0
+* Add TsLint pre-commit hook
+
+## 1.5.1
+* Fix ad hoc hook creation
+
+## 1.5.0
+* Add ignoreMessagePattern setting on hooks to allow messages that follow a pattern to be ignored.
+  Useful for working around missing features in linters.
+
+## 1.4.0
+* Add NspCheck hook 
+
+## 1.3.5
+* Work around empty stylint results when linting large files
+
+## 1.3.4
+* Fix problemOnUnmodifiedLine setting
+
 ## 1.3.3
 * Fix link in starter config file
 

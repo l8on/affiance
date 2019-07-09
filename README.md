@@ -404,6 +404,7 @@ limitation.
 * [`*`MergeConflicts](lib/hook/pre-commit/MergeConflicts.js)
 * [MochaOnly](lib/hook/pre-commit/MochaOnly.js)
 * [StylusLint](lib/hook/pre-commit/StylusLint.js)
+* [TsLint](lib/hook/pre-commit/TsLint.js)
 
 ### PrePush
 

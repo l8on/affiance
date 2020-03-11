@@ -10,12 +10,12 @@ program.command('install')
   .option('-f, --force', 'Force installation to replace existing hooks')
   .option('-u, --update', 'Update existing installation if necessary')
   .action(function(commandOptions) {
-      var Installer = require('../lib/cli/Installer');
-      new Installer(logger, {
-          action: 'install',
-          force: commandOptions.force,
-          update: commandOptions.update
-      }).run();
+    let Installer = require('../lib/cli/Installer');
+    new Installer(logger, {
+      action: 'install',
+      force: commandOptions.force,
+      update: commandOptions.update
+    }).run();
   });
 
 program.command('uninstall')
@@ -36,6 +36,19 @@ program.command('sign')
       action: 'sign',
       hookToSign: commandOptions.hook
     }).run();
+  });
+
+program.command('run')
+  .description('Run all pre-commit hooks against the repo')
+  // .option('-b, --base [commitish]', 'The base commit to use when linting. Will lint from this commit to HEAD.')
+  .action(function(_commandOptions) {
+    let Installer = require('../lib/cli/Installer');
+    new Installer(logger, {
+      action: 'run',
+    }).run().then(function(result) {
+      // We finished, use the result
+      process.exit(result ? 0 : 65); // EX_DATAERR
+    });
   });
 
 program.command('version')

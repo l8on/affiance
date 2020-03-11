@@ -31,6 +31,7 @@ CommitMsg:
 
 PreCommit:
   ALL:
+    problemOnUnmodifiedLine: 'warn'
     quiet: false
 
   EsLint:

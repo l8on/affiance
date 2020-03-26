@@ -75,7 +75,7 @@ requiring `sudo` privileges. Using a Node version manager like
 [`nvm`](https://github.com/creationix/nvm/blob/master/README.markdown) can help
 here.
 
-Once you have an environment that allows you to install gems without `sudo`,
+Once you have an environment that allows you to install packages without `sudo`,
 you can run the following command to make affiance available globally:
 
 ### Global installation

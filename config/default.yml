@@ -109,6 +109,20 @@ PreCommit:
     flags: ['-EIHn', '(it|describe)\.only']
     include: 'test/**/*.js'
 
+  Spectral:
+    enabled: false
+    description: 'Analyze with Spectral'
+    requiredExecutable: './node_modules/.bin/spectral'
+    globalRequiredExecutable: 'spectral'
+    flags: ['lint', '--quiet', '--ignore-unknown-format', '--format', 'text']
+    installCommand: 'npm install @stoplight/spectral'
+    globalInstallCommand: 'npm install -g @stoplight/spectral'
+    include:
+      - '**/*.json'
+      - '**/*.yml'
+      - '**/*.yaml'
+    exclude: 'package.json'
+
   StylusLint:
     enabled: false
     description: "Analyze with stylus linter"

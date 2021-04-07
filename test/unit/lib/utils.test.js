@@ -61,9 +61,21 @@ describe('utils', function() {
     });
   });
 
+  describe('currentCommand', function() {
+    it('retrieves the current command name', function() {
+      expect(utils.currentCommand()).to.match(/node/);
+    });
+  });
+
   describe('parentCommand', function() {
     it('retrieves the parent command name', function() {
-      expect(utils.parentCommand()).to.match(/node/);
+      expect(utils.parentCommand()).to.be.a.string;
+    });
+  });
+
+  describe('grandParentCommand', function() {
+    it('retrieves the grandparent command name', function() {
+      expect(utils.grandParentCommand()).to.be.a.string;
     });
   });
 

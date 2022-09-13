@@ -109,6 +109,13 @@ PreCommit:
     flags: ['-EIHn', '(it|describe)\.only']
     include: 'test/**/*.js'
 
+  RBACDeprecated:
+    enabled: false
+    description: 'Check for use of deprecated access role methods'
+    quiet: true
+    flags: ['inInterviewer', 'hasAccessByRole']
+    include: '**/*.js/*.coffee'
+
   Spectral:
     enabled: false
     description: 'Analyze with Spectral'

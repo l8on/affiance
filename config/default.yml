@@ -115,8 +115,8 @@ PreCommit:
     requiredExecutable: './node_modules/.bin/spectral'
     globalRequiredExecutable: 'spectral'
     flags: ['lint', '--quiet', '--ignore-unknown-format', '--format', 'text']
-    installCommand: 'npm install @stoplight/spectral'
-    globalInstallCommand: 'npm install -g @stoplight/spectral'
+    installCommand: 'npm install @stoplight/spectral-cli'
+    globalInstallCommand: 'npm install -g @stoplight/spectral-cli'
     include:
       - '**/*.json'
       - '**/*.yml'
